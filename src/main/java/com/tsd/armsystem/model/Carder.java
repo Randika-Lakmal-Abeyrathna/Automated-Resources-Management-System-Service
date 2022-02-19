@@ -1,5 +1,6 @@
 package com.tsd.armsystem.model;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,21 +8,19 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+@Entity
 @Data
 @Builder
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class City {
+public class Carder {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idcity;
-    private String name;
-    private String postalcode;
+    private int idcarder;
+    private int limit;
+    private int current;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "district_id",referencedColumnName = "id")
-    private District district;
-
-
+    @JoinColumn(name = "subjects_id",referencedColumnName = "id")
+    private Subjects subjects;
 }

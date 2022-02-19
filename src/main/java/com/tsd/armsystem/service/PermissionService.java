@@ -30,11 +30,11 @@ public class PermissionService {
     }
 
     private int getCountByPermission(String permissionName){
-        return permissionRepository.countByPermission(permissionName);
+        return permissionRepository.countByName(permissionName);
     }
 
     private void permissionAddValidation(Permission permission) {
-        String permissionName = permission.getPermission();
+        String permissionName = permission.getName();
 
         if (permissionName.isEmpty() || permissionName.isBlank()){
             throw new PermissionException("permission cannot be empty or blank");

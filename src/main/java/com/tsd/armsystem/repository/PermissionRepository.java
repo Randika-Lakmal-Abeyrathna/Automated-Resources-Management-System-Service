@@ -11,5 +11,5 @@ public interface PermissionRepository extends JpaRepository<Permission,Integer> 
 
     Optional<Permission> findByName(String permissionName);
 
-    int countByPermission(String permissionName);
+    int countByName(String permissionName);
 }
