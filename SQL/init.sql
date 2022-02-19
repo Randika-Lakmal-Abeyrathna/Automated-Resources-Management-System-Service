@@ -26,12 +26,12 @@ DROP TABLE IF EXISTS `carder`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `carder` (
   `idcarder` int NOT NULL,
-  `limt` varchar(45) DEFAULT NULL,
-  `current` varchar(45) DEFAULT NULL,
-  `Subjects_id` int NOT NULL,
+  `limit` int DEFAULT NULL,
+  `current` int DEFAULT NULL,
+  `subjects_id` int NOT NULL,
   PRIMARY KEY (`idcarder`),
-  KEY `fk_carder_Subjects1_idx` (`Subjects_id`),
-  CONSTRAINT `fk_carder_Subjects1` FOREIGN KEY (`Subjects_id`) REFERENCES `subjects` (`id`)
+  KEY `fk_carder_Subjects1_idx` (`subjects_id`),
+  CONSTRAINT `fk_carder_Subjects1` FOREIGN KEY (`subjects_id`) REFERENCES `subjects` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -54,11 +54,11 @@ DROP TABLE IF EXISTS `city`;
 CREATE TABLE `city` (
   `idcity` int NOT NULL AUTO_INCREMENT,
   `name` varchar(75) DEFAULT NULL,
-  `district_iddistrict` int NOT NULL,
   `postalcode` varchar(45) DEFAULT NULL,
+  `district_id` int NOT NULL,
   PRIMARY KEY (`idcity`),
-  KEY `fk_city_district1_idx` (`district_iddistrict`),
-  CONSTRAINT `fk_city_district1` FOREIGN KEY (`district_iddistrict`) REFERENCES `district` (`id`)
+  KEY `fk_city_district1_idx` (`district_id`),
+  CONSTRAINT `fk_city_district1` FOREIGN KEY (`district_id`) REFERENCES `district` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -255,7 +255,7 @@ DROP TABLE IF EXISTS `permission`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `permission` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `permission` varchar(45) DEFAULT NULL,
+  `name` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -293,27 +293,27 @@ LOCK TABLES `province` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `qulification`
+-- Table structure for table `qualification`
 --
 
-DROP TABLE IF EXISTS `qulification`;
+DROP TABLE IF EXISTS `qualification`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `qulification` (
+CREATE TABLE `qualification` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(45) DEFAULT NULL,
-  `discription` varchar(45) DEFAULT NULL,
+  `description` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `qulification`
+-- Dumping data for table `qualification`
 --
 
-LOCK TABLES `qulification` WRITE;
-/*!40000 ALTER TABLE `qulification` DISABLE KEYS */;
-/*!40000 ALTER TABLE `qulification` ENABLE KEYS */;
+LOCK TABLES `qualification` WRITE;
+/*!40000 ALTER TABLE `qualification` DISABLE KEYS */;
+/*!40000 ALTER TABLE `qualification` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -511,7 +511,7 @@ DROP TABLE IF EXISTS `subjects`;
 CREATE TABLE `subjects` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(45) DEFAULT NULL,
-  `discription` varchar(45) DEFAULT NULL,
+  `description` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -538,7 +538,6 @@ CREATE TABLE `teacher` (
   `appointmentdate` date DEFAULT NULL,
   `retiredate` varchar(45) DEFAULT NULL COMMENT 'check if the age is 55 -for female\n65 for male',
   `id` int NOT NULL AUTO_INCREMENT,
-  `type` varchar(45) DEFAULT NULL COMMENT 'principal\nteacher combine --> all sri lanka\nteacher provincial -> provice',
   `teacher_type_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_teacher_user1_idx` (`user_nic`),
@@ -583,31 +582,31 @@ LOCK TABLES `teacher_type` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `teachers_qulification`
+-- Table structure for table `teachers_qualification`
 --
 
-DROP TABLE IF EXISTS `teachers_qulification`;
+DROP TABLE IF EXISTS `teachers_qualification`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `teachers_qulification` (
-  `qulification_idqulification` int NOT NULL,
+CREATE TABLE `teachers_qualification` (
   `teacher_id` int NOT NULL,
   `id` int NOT NULL AUTO_INCREMENT,
+  `qualification_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_qulification_has_teacher_teacher1_idx` (`teacher_id`),
-  KEY `fk_qulification_has_teacher_qulification1_idx` (`qulification_idqulification`),
-  CONSTRAINT `fk_qulification_has_teacher_qulification1` FOREIGN KEY (`qulification_idqulification`) REFERENCES `qulification` (`id`),
-  CONSTRAINT `fk_qulification_has_teacher_teacher1` FOREIGN KEY (`teacher_id`) REFERENCES `teacher` (`id`)
+  KEY `fk_teachers_qualification_qualification1_idx` (`qualification_id`),
+  CONSTRAINT `fk_qulification_has_teacher_teacher1` FOREIGN KEY (`teacher_id`) REFERENCES `teacher` (`id`),
+  CONSTRAINT `fk_teachers_qualification_qualification1` FOREIGN KEY (`qualification_id`) REFERENCES `qualification` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `teachers_qulification`
+-- Dumping data for table `teachers_qualification`
 --
 
-LOCK TABLES `teachers_qulification` WRITE;
-/*!40000 ALTER TABLE `teachers_qulification` DISABLE KEYS */;
-/*!40000 ALTER TABLE `teachers_qulification` ENABLE KEYS */;
+LOCK TABLES `teachers_qualification` WRITE;
+/*!40000 ALTER TABLE `teachers_qualification` DISABLE KEYS */;
+/*!40000 ALTER TABLE `teachers_qualification` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -618,14 +617,14 @@ DROP TABLE IF EXISTS `teachers_subject`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `teachers_subject` (
-  `Subjects_idSubjects` int NOT NULL,
   `teacher_id` int NOT NULL,
   `id` int NOT NULL AUTO_INCREMENT,
+  `subjects_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_Subjects_has_teacher_teacher1_idx` (`teacher_id`),
-  KEY `fk_Subjects_has_teacher_Subjects1_idx` (`Subjects_idSubjects`),
-  CONSTRAINT `fk_Subjects_has_teacher_Subjects1` FOREIGN KEY (`Subjects_idSubjects`) REFERENCES `subjects` (`id`),
-  CONSTRAINT `fk_Subjects_has_teacher_teacher1` FOREIGN KEY (`teacher_id`) REFERENCES `teacher` (`id`)
+  KEY `fk_teachers_subject_subjects1_idx` (`subjects_id`),
+  CONSTRAINT `fk_Subjects_has_teacher_teacher1` FOREIGN KEY (`teacher_id`) REFERENCES `teacher` (`id`),
+  CONSTRAINT `fk_teachers_subject_subjects1` FOREIGN KEY (`subjects_id`) REFERENCES `subjects` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -803,4 +802,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-02-19 22:26:48
+-- Dump completed on 2022-02-20  1:08:33

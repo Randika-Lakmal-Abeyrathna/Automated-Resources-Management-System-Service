@@ -28,6 +28,7 @@ public class User {
     private String password;
     private boolean enabled;
     private Date createddate;
+    private String email;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "city_idcity",referencedColumnName = "idcity")
     private City city;
