@@ -20,9 +20,12 @@ public class User {
 
     @Id
     private String nic;
+    private String firstName;
+    private String middleName;
+    private String lastName;
     private String addressNo;
-    private String address_street1;
-    private String address_street2;
+    private String addressStreet;
+    private String addressStreet2;
     private Integer contactNumber1;
     private Integer contactNumber2;
     private String password;
@@ -41,6 +44,9 @@ public class User {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "image_data_idimage_data" ,referencedColumnName = "idimage_data")
     private ImageData imageData;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "marital_status_id" ,referencedColumnName = "id")
+    private MaritalStatus maritalStatus;
     @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
