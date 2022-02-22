@@ -32,6 +32,7 @@ public class User {
     private boolean enabled;
     private Date createddate;
     private String email;
+    private Date lastmodifieddate;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "city_idcity",referencedColumnName = "idcity")
     private City city;
