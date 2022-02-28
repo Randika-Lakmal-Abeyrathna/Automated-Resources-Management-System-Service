@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -32,7 +33,7 @@ public class User {
     private boolean enabled;
     private Date createddate;
     private String email;
-    private Date lastmodifieddate;
+    private Instant lastmodifieddate;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "city_idcity",referencedColumnName = "idcity")
     private City city;
