@@ -19,6 +19,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.Random;
+
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -70,5 +72,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(daoAuthenticationProvider());
     }
 
+
+    public static String randomPasswordGenerate(){
+
+        String s = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz@#$%^&*!";
+
+        Random random = new Random();
+
+        StringBuilder stringBuilder = new StringBuilder(10);
+        for (int i=0; i<10; i++){
+            stringBuilder.append(s.charAt(random.nextInt(s.length())));
+        }
+
+        return stringBuilder.toString();
+    }
 
 }
