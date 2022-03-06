@@ -1,5 +1,6 @@
 package com.tsd.armsystem.controller;
 
+import com.tsd.armsystem.dto.ForgotPasswordRequest;
 import com.tsd.armsystem.dto.PasswordResetRequest;
 import com.tsd.armsystem.service.UserService;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,12 @@ public class UserController {
     @PostMapping("/reset")
     public ResponseEntity<?> resetPassword(@RequestBody PasswordResetRequest passwordResetRequest){
         userService.resetPassword(passwordResetRequest);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/forgot")
+    public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordRequest forgotPasswordRequest){
+        userService.forgetPassword(forgotPasswordRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

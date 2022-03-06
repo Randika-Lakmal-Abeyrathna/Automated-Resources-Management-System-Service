@@ -1,5 +1,7 @@
 package com.tsd.armsystem.service;
 
+import com.tsd.armsystem.config.SecurityConfig;
+import com.tsd.armsystem.dto.ForgotPasswordRequest;
 import com.tsd.armsystem.dto.PasswordResetRequest;
 import com.tsd.armsystem.exception.UserException;
 import com.tsd.armsystem.model.User;
@@ -41,6 +43,19 @@ public class UserService {
             throw new UserException("Password Mismatched ! ");
         }
 
+    }
+
+    public void forgetPassword(ForgotPasswordRequest ForgotPasswordRequest){
+        User user = userRepository.findByNic(ForgotPasswordRequest.getNic()).orElseThrow(() -> new UserException("User Not Found"));
+
+        String generatedPassword = SecurityConfig.randomPasswordGenerate();
+        String email = user.getEmail();
+        System.out.println("Generated Password"+generatedPassword);
+  //TODO -send the email to user
+
+        user.setPassword(passwordEncoder.encode(generatedPassword));
+        user.setLastmodifieddate(Instant.now());
+        userRepository.save(user);
     }
 
 }
