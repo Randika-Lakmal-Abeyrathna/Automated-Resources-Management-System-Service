@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @Entity
@@ -21,5 +18,8 @@ public class Zonal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idzonal;
     private String name;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "city_idcity",referencedColumnName = "idcity")
+    private City city;
 
 }
