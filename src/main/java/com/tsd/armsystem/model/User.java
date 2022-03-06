@@ -38,6 +38,12 @@ public class User {
     @JoinColumn(name = "city_idcity",referencedColumnName = "idcity")
     private City city;
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "gender_idgender",referencedColumnName = "idgender")
+    private Gender gender;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "salutation_idsalutation",referencedColumnName = "idsalutation")
+    private Salutation salutation;
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "status_idstatus",referencedColumnName = "idstatus")
     private Status status;
     @ManyToOne(fetch = FetchType.EAGER)
