@@ -4,6 +4,7 @@ import com.tsd.armsystem.config.SecurityConfig;
 import com.tsd.armsystem.dto.ForgotPasswordRequest;
 import com.tsd.armsystem.dto.PasswordResetRequest;
 import com.tsd.armsystem.exception.UserException;
+import com.tsd.armsystem.model.NotificationEmail;
 import com.tsd.armsystem.model.User;
 import com.tsd.armsystem.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MailService mailService;
 
     public void resetPassword(PasswordResetRequest passwordResetRequest){
         validatePassword(passwordResetRequest);
@@ -51,8 +53,8 @@ public class UserService {
         String generatedPassword = SecurityConfig.randomPasswordGenerate();
         String email = user.getEmail();
         System.out.println("Generated Password"+generatedPassword);
-  //TODO -send the email to user
-
+        mailService.sendMail(new NotificationEmail(email,"New Password !","New Password for the system login is " + generatedPassword +"" +
+                " Please reset the password after the login. Thank you."));
         user.setPassword(passwordEncoder.encode(generatedPassword));
         user.setLastmodifieddate(Instant.now());
         userRepository.save(user);
