@@ -19,9 +19,6 @@ public class School {
     private int idschool;
     private String name;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "carder_idcarder",referencedColumnName = "idcarder")
-    private Carder carder;
-    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "city_idcity",referencedColumnName = "idcity")
     private City city;
     @ManyToOne(fetch = FetchType.EAGER)
