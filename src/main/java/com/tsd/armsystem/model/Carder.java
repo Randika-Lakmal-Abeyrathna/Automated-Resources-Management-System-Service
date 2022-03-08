@@ -23,4 +23,7 @@ public class Carder {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "subjects_id",referencedColumnName = "id")
     private Subjects subjects;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "school_idschool",referencedColumnName = "idschool")
+    private School school;
 }
