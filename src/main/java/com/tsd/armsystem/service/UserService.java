@@ -3,9 +3,9 @@ package com.tsd.armsystem.service;
 import com.tsd.armsystem.config.SecurityConfig;
 import com.tsd.armsystem.dto.ForgotPasswordRequest;
 import com.tsd.armsystem.dto.PasswordResetRequest;
+import com.tsd.armsystem.dto.UserResponse;
 import com.tsd.armsystem.exception.UserException;
-import com.tsd.armsystem.model.NotificationEmail;
-import com.tsd.armsystem.model.User;
+import com.tsd.armsystem.model.*;
 import com.tsd.armsystem.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -58,6 +58,35 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(generatedPassword));
         user.setLastmodifieddate(Instant.now());
         userRepository.save(user);
+    }
+
+
+    public UserResponse getUserByNIC(String nic){
+       User user= userRepository.findByNic(nic).orElseThrow(() -> new UserException("User Not Found"));
+
+       UserResponse userResponse = new UserResponse();
+
+        userResponse.setNic(user.getNic());
+        userResponse.setFirstName(user.getFirstName());
+        userResponse.setMiddleName(user.getMiddleName());
+        userResponse.setLastName(user.getLastName());
+        userResponse.setAddressNo(user.getAddressNo());
+        userResponse.setAddressStreet(user.getAddressStreet());
+        userResponse.setAddressStreet2(user.getAddressStreet2());
+        userResponse.setContactNumber1(user.getContactNumber1());
+        userResponse.setContactNumber2(user.getContactNumber2());
+        userResponse.setEmail(user.getEmail());
+        userResponse.setCity(user.getCity());
+        userResponse.setGender(user.getGender());
+        userResponse.setSalutation(user.getSalutation());
+        userResponse.setStatus(user.getStatus());
+        userResponse.setUserType(user.getUserType());
+        userResponse.setImageData(user.getImageData());
+        userResponse.setMaritalStatus(user.getMaritalStatus());
+
+        return userResponse;
+
+
     }
 
 }
