@@ -10,7 +10,7 @@ import java.util.Date;
 
 @Data
 @Builder
-@Entity
+@Entity(name="formerexperiance")
 @NoArgsConstructor
 @AllArgsConstructor
 public class FormerExperiance {
