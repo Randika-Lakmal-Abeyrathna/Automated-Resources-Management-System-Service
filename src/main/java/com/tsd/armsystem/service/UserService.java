@@ -89,4 +89,9 @@ public class UserService {
 
     }
 
+    public User getUserForTeacherByNIC(String nic){
+
+       return  userRepository.findByNic(nic).orElseThrow(() -> new UserException("User Not Found"));
+    }
+
 }

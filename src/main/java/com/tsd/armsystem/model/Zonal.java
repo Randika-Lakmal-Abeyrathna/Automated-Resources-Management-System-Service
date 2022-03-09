@@ -19,7 +19,7 @@ public class Zonal {
     private int idzonal;
     private String name;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "city_idcity",referencedColumnName = "idcity")
-    private City city;
+    @JoinColumn(name = "district_id",referencedColumnName = "id")
+    private District district;
 
 }
