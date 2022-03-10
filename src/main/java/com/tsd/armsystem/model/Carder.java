@@ -18,7 +18,7 @@ public class Carder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idcarder;
-    private int limit;
+    private int limitation;
     private int current;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "subjects_id",referencedColumnName = "id")
