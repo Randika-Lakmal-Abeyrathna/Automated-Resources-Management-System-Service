@@ -3,6 +3,7 @@ package com.tsd.armsystem.service;
 
 import com.tsd.armsystem.exception.TeacherException;
 import com.tsd.armsystem.model.FormerExperiance;
+import com.tsd.armsystem.model.School;
 import com.tsd.armsystem.model.Teacher;
 import com.tsd.armsystem.model.User;
 import com.tsd.armsystem.repository.TeacherRepository;
@@ -21,6 +22,7 @@ public class TeacherService {
     private final TeacherRepository teacherRepository;
     private final UserService userService;
     private final TeacherExperienceService teacherExperienceService;
+    private final SchoolService schoolService;
 
     public Teacher getTeacherByUser(String nic){
         User user = userService.getUserForTeacherByNIC(nic);
@@ -33,5 +35,12 @@ public class TeacherService {
 
         return teacherExperienceService.getExperienceByTeacher(teacher);
     }
+
+    public List<Teacher> getTeachersBySchool(int SchoolId){
+        School school = schoolService.getSchoolById(SchoolId);
+        return teacherRepository.findBySchool(school);
+
+    }
+
 
 }
