@@ -31,4 +31,11 @@ public class TeacherController {
         List<FormerExperiance> formerExperiances = teacherService.getTeacherExperienceByTeacherId(id);
         return new ResponseEntity<>(formerExperiances,HttpStatus.OK);
     }
+
+    @GetMapping("/school/{id}")
+    public ResponseEntity<List<Teacher>> getTeachersBySchoolId(@PathVariable Integer id){
+        List<Teacher> teachersBySchool = teacherService.getTeachersBySchool(id);
+        return new ResponseEntity<>(teachersBySchool,HttpStatus.OK);
+    }
+
 }
