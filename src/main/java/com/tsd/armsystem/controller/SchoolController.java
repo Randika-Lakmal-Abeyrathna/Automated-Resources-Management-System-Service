@@ -1,14 +1,14 @@
 package com.tsd.armsystem.controller;
 
+import com.tsd.armsystem.dto.SchoolRequest;
 import com.tsd.armsystem.model.Carder;
+import com.tsd.armsystem.model.School;
+import com.tsd.armsystem.model.SchoolType;
 import com.tsd.armsystem.service.SchoolService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,6 +23,13 @@ public class SchoolController {
     public ResponseEntity<List<Carder>> getSchoolCarderBySchoolId(@PathVariable Integer schoolId){
         List<Carder> carderList = schoolService.getSchoolCarderBySchoolId(schoolId);
         return new ResponseEntity<>(carderList, HttpStatus.OK);
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<School> addSchool(@RequestBody SchoolRequest schoolRequest){
+        School school = schoolService.addSchool(schoolRequest);
+        return new ResponseEntity<>(school, HttpStatus.CREATED);
+
     }
 
 }
