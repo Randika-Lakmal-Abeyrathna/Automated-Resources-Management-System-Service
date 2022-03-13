@@ -3,6 +3,7 @@ package com.tsd.armsystem.service;
 import com.tsd.armsystem.dto.SchoolRequest;
 import com.tsd.armsystem.exception.SchoolException;
 import com.tsd.armsystem.model.Carder;
+import com.tsd.armsystem.model.City;
 import com.tsd.armsystem.model.School;
 import com.tsd.armsystem.repository.SchoolRepository;
 import lombok.AllArgsConstructor;
@@ -17,9 +18,8 @@ import java.util.List;
 @Transactional
 public class SchoolService {
      private final SchoolRepository schoolRepository;
-     /**
-      * private CityService cityService;
-      * **/
+     private final CityService cityService;
+
      private CarderService carderService;
 
      public School getSchoolById(Integer schoolId){
@@ -34,17 +34,9 @@ public class SchoolService {
      public School addSchool(SchoolRequest schoolRequest){
           School school = new School();
           school.setName(schoolRequest.getName());
+          City city = cityService.getCityById(schoolRequest.getCityId());
 
-          // City --->
-          /**CityRepository -->Optional<City> findByIdCity(Integer id);
-           CityService --> getSchoolById() -> check
-           CityException
-           ------
-           City city = cityService.getCityById(schoolRequest.getcityid());
-           school.setCity(city);
-           **/
-          // Zonal
-          //School Type
+          school.setCity(city);
 
           return schoolRepository.save(school);
      }
