@@ -1,5 +1,7 @@
 package com.tsd.armsystem.service;
 
+import com.tsd.armsystem.dto.ApproveUserUpdateDataRequest;
+import com.tsd.armsystem.dto.RejectUserUpdateDataRequest;
 import com.tsd.armsystem.exception.UpdateUserException;
 import com.tsd.armsystem.model.School;
 import com.tsd.armsystem.model.Teacher;
@@ -20,6 +22,7 @@ public class UpdateUserService {
 
     private final UpdateUserRepository updateUserRepository;
     private final TeacherService teacherService;
+    private final UserService userService;
 
 
     public List<UpdateUser> getPendingApprovalUserUpdates(String nic){
@@ -51,6 +54,44 @@ public class UpdateUserService {
 
     public UpdateUser getUpdateUserById(Integer id){
         return updateUserRepository.findById(id).orElseThrow(()-> new UpdateUserException("Update record Not found"));
+    }
+
+    public void approveUserUpdate(Integer id){
+        UpdateUser updateUser = getUpdateUserById(id);
+
+        ApproveUserUpdateDataRequest request = new ApproveUserUpdateDataRequest();
+        request.setFirstName(updateUser.getFirstName());
+        request.setMiddleName(updateUser.getMiddleName());
+        request.setLastName(updateUser.getLastName());
+        request.setAddressNo(updateUser.getAddressNo());
+        request.setAddressStreet1(updateUser.getAddressStreet());
+        request.setAddressStreet2(updateUser.getAddressStreet2());
+        request.setContactNumber1(updateUser.getContactNumber1());
+        request.setContactNumber2(updateUser.getContactNumber2());
+        request.setEmail(updateUser.getEmail());
+        request.setCity(updateUser.getCity());
+        request.setSalutation(updateUser.getSalutation());
+        request.setGender(updateUser.getGender());
+        request.setMaritalStatus(updateUser.getMaritalStatus());
+        request.setUser(updateUser.getUser());
+
+        User user = userService.updateUser(request);
+        //Approve status -->1
+        updateUser.setStatus(1);
+        updateUser.setUpdated(true);
+
+        updateUserRepository.save(updateUser);
+
+    }
+
+    public void rejectUserUpdate(RejectUserUpdateDataRequest rejectUserUpdateDataRequest){
+        UpdateUser updateUser = getUpdateUserById(rejectUserUpdateDataRequest.getId());
+        // Reject Status -->2
+        updateUser.setStatus(2);
+        updateUser.setComment(rejectUserUpdateDataRequest.getReason());
+
+        updateUserRepository.save(updateUser);
+
     }
 
 
