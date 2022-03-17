@@ -1,14 +1,12 @@
 package com.tsd.armsystem.controller;
 
+import com.tsd.armsystem.dto.RejectUserUpdateDataRequest;
 import com.tsd.armsystem.model.UpdateUser;
 import com.tsd.armsystem.service.UpdateUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,4 +28,17 @@ public class UpdateUserController {
         UpdateUser updateUser = updateUserService.getUpdateUserById(id);
         return new ResponseEntity<>(updateUser,HttpStatus.OK);
     }
+
+    @GetMapping("/update/{id}")
+    public ResponseEntity<?> approveUpdateUserDetails(@PathVariable Integer id){
+        updateUserService.approveUserUpdate(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<?> rejectUpdateUserDetails(@RequestBody RejectUserUpdateDataRequest rejectUserUpdateDataRequest){
+        updateUserService.rejectUserUpdate(rejectUserUpdateDataRequest);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

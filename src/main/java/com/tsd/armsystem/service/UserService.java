@@ -1,6 +1,7 @@
 package com.tsd.armsystem.service;
 
 import com.tsd.armsystem.config.SecurityConfig;
+import com.tsd.armsystem.dto.ApproveUserUpdateDataRequest;
 import com.tsd.armsystem.dto.ForgotPasswordRequest;
 import com.tsd.armsystem.dto.PasswordResetRequest;
 import com.tsd.armsystem.dto.UserResponse;
@@ -92,6 +93,26 @@ public class UserService {
     public User getUserForTeacherByNIC(String nic){
 
        return  userRepository.findByNic(nic).orElseThrow(() -> new UserException("User Not Found"));
+    }
+
+    public User updateUser(ApproveUserUpdateDataRequest approveUserUpdateDataRequest){
+        User  user = approveUserUpdateDataRequest.getUser();
+        user.setFirstName(approveUserUpdateDataRequest.getFirstName());
+        user.setMiddleName(approveUserUpdateDataRequest.getMiddleName());
+        user.setLastName(approveUserUpdateDataRequest.getLastName());
+        user.setAddressNo(approveUserUpdateDataRequest.getAddressNo());
+        user.setAddressStreet(approveUserUpdateDataRequest.getAddressStreet1());
+        user.setAddressStreet2(approveUserUpdateDataRequest.getAddressStreet2());
+        user.setContactNumber1(approveUserUpdateDataRequest.getContactNumber1());
+        user.setContactNumber2(approveUserUpdateDataRequest.getContactNumber2());
+        user.setEmail(approveUserUpdateDataRequest.getEmail());
+        user.setCity(approveUserUpdateDataRequest.getCity());
+        user.setSalutation(approveUserUpdateDataRequest.getSalutation());
+        user.setGender(approveUserUpdateDataRequest.getGender());
+        user.setMaritalStatus(approveUserUpdateDataRequest.getMaritalStatus());
+        user.setLastmodifieddate(Instant.now());
+
+        return userRepository.save(user);
     }
 
 }
