@@ -17,9 +17,7 @@ public class TeachersQualification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "qualification_id",referencedColumnName = "id")
-    private Qualification qualification;
+    private String qualification;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "teacher_id",referencedColumnName = "id")
     private Teacher teacher;
