@@ -13,4 +13,6 @@ public interface UpdateUserRepository extends JpaRepository<UpdateUser,Integer> 
 
     List<UpdateUser> findByUser(User user);
 
+    Optional<UpdateUser> findById(Integer id);
+
 }

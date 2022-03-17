@@ -49,5 +49,9 @@ public class UpdateUserService {
         return updateUserList;
     }
 
+    public UpdateUser getUpdateUserById(Integer id){
+        return updateUserRepository.findById(id).orElseThrow(()-> new UpdateUserException("Update record Not found"));
+    }
+
 
 }

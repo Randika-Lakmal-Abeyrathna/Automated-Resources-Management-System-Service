@@ -18,7 +18,7 @@ public class UpdateUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private int id;
     private String firstName;
     private String middleName;
     private String lastName;

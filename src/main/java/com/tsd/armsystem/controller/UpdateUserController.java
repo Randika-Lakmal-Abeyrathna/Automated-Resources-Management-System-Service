@@ -24,4 +24,10 @@ public class UpdateUserController {
 
         return new ResponseEntity<>(pendingApprovalUserUpdates, HttpStatus.OK);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UpdateUser> getUpdateUserById(@PathVariable Integer id){
+        UpdateUser updateUser = updateUserService.getUpdateUserById(id);
+        return new ResponseEntity<>(updateUser,HttpStatus.OK);
+    }
 }
