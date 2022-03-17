@@ -45,6 +45,13 @@ public class UpdateUser {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_nic",referencedColumnName = "nic")
     private User user;
+    private String comment;
+    /**
+     * pending ->0
+     * approve ->1
+     * reject ->2
+     * **/
+    private int status;
 
 
 }
