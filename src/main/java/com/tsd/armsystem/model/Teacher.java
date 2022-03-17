@@ -40,11 +40,5 @@ public class Teacher {
             inverseJoinColumns = @JoinColumn(name = "subjects_id")
     )
     private Set<Subjects> subjects = new HashSet<>();
-    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "teachers_qualification",
-            joinColumns = @JoinColumn(name = "teacher_id"),
-            inverseJoinColumns = @JoinColumn(name = "qualification_id")
-    )
-    private Set<Qualification> qualifications = new HashSet<>();
+
 }
