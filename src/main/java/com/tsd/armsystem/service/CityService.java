@@ -19,5 +19,9 @@ public class CityService {
           return cityRepository.findByIdcity(cityId).orElseThrow(()-> new CityException("City Not Found"));
      }
 
+     public List<City> getAllCity(){
+          return cityRepository.findAll();
+     }
+
 
 }
