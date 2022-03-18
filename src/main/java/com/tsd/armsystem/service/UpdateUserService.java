@@ -140,6 +140,10 @@ public class UpdateUserService {
         return updateUserRepository.findByUser(user);
     }
 
+    public void deleteUpdateRequest(Integer id){
+        updateUserRepository.deleteById(id);
+    }
+
 
 
 }
