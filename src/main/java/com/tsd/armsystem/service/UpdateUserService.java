@@ -2,17 +2,17 @@ package com.tsd.armsystem.service;
 
 import com.tsd.armsystem.dto.ApproveUserUpdateDataRequest;
 import com.tsd.armsystem.dto.RejectUserUpdateDataRequest;
+import com.tsd.armsystem.dto.UserUpdateRequest;
 import com.tsd.armsystem.exception.UpdateUserException;
-import com.tsd.armsystem.model.School;
-import com.tsd.armsystem.model.Teacher;
-import com.tsd.armsystem.model.UpdateUser;
-import com.tsd.armsystem.model.User;
+import com.tsd.armsystem.model.*;
 import com.tsd.armsystem.repository.UpdateUserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @Service
@@ -23,6 +23,10 @@ public class UpdateUserService {
     private final UpdateUserRepository updateUserRepository;
     private final TeacherService teacherService;
     private final UserService userService;
+    private final CityService cityService;
+    private final GenderService genderService;
+    private final MaritalStatusService maritalStatusService;
+    private final SalutationService salutationService;
 
 
     public List<UpdateUser> getPendingApprovalUserUpdates(String nic){
@@ -91,6 +95,43 @@ public class UpdateUserService {
         updateUser.setComment(rejectUserUpdateDataRequest.getReason());
 
         updateUserRepository.save(updateUser);
+
+    }
+
+    public void addUpdateUser(UserUpdateRequest userUpdateRequest){
+        UpdateUser updateUser = new UpdateUser();
+
+        updateUser.setFirstName(userUpdateRequest.getFirstName());
+        updateUser.setMiddleName(userUpdateRequest.getMiddleName());
+        updateUser.setLastName(userUpdateRequest.getLastName());
+        updateUser.setAddressNo(userUpdateRequest.getAddressNo());
+        updateUser.setAddressStreet(userUpdateRequest.getAddressStreet1());
+        updateUser.setAddressStreet2(userUpdateRequest.getAddressStreet2());
+        updateUser.setContactNumber1(Integer.parseInt(userUpdateRequest.getContactNumber1()));
+        updateUser.setContactNumber2(Integer.parseInt(userUpdateRequest.getContactNumber2()));
+        updateUser.setEmail(userUpdateRequest.getEmail());
+        updateUser.setUpdated(false);
+        updateUser.setCreateddate(Instant.now());
+        updateUser.setComment("");
+        updateUser.setStatus(0);
+
+        City city = cityService.getCityByCity(userUpdateRequest.getCity().toLowerCase());
+        updateUser.setCity(city);
+
+        Gender gender = genderService.findGenderByGender(userUpdateRequest.getGender().toLowerCase());
+        updateUser.setGender(gender);
+
+        MaritalStatus maritalStatus = maritalStatusService.getMaritalStatusByStatus(userUpdateRequest.getMaritalstatus().toLowerCase());
+        updateUser.setMaritalStatus(maritalStatus);
+
+        Salutation salutation = salutationService.getSalutationBySalutation(userUpdateRequest.getSalutation().toLowerCase());
+        updateUser.setSalutation(salutation);
+
+        User user = userService.getUserForTeacherByNIC(userUpdateRequest.getUserid());
+        updateUser.setUser(user);
+
+        updateUserRepository.save(updateUser);
+
 
     }
 

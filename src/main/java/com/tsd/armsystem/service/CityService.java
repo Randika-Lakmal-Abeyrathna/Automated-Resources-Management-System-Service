@@ -23,5 +23,11 @@ public class CityService {
           return cityRepository.findAll();
      }
 
+     public City getCityByCity(String city){
+          List<City> list = cityRepository.findByName(city);
+
+          return list.stream().findFirst().orElseThrow(()-> new CityException("City Not Found"));
+     }
+
 
 }
