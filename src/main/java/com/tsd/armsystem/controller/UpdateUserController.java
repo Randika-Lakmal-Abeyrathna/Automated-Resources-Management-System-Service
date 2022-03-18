@@ -55,5 +55,11 @@ public class UpdateUserController {
     }
 
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUpdateUserRequest(@PathVariable Integer id){
+        updateUserService.deleteUpdateRequest(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 
 }
