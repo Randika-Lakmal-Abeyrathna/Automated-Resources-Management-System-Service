@@ -48,6 +48,12 @@ public class UpdateUserController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @GetMapping("/find/user/{nic}")
+    public ResponseEntity<List<UpdateUser>> getAllUpdateUserRequestForUser(@PathVariable String nic){
+        List<UpdateUser> updateUserList = updateUserService.getUpdateUserRequestForUser(nic);
+        return new ResponseEntity<>(updateUserList,HttpStatus.OK);
+    }
+
 
 
 }

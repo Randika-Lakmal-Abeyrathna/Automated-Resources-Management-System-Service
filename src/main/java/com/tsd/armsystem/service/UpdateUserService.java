@@ -135,5 +135,11 @@ public class UpdateUserService {
 
     }
 
+    public List<UpdateUser> getUpdateUserRequestForUser(String userid){
+        User user = userService.getUserForTeacherByNIC(userid);
+        return updateUserRepository.findByUser(user);
+    }
+
+
 
 }
