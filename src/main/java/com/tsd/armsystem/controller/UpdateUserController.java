@@ -1,6 +1,7 @@
 package com.tsd.armsystem.controller;
 
 import com.tsd.armsystem.dto.RejectUserUpdateDataRequest;
+import com.tsd.armsystem.dto.UserUpdateRequest;
 import com.tsd.armsystem.model.UpdateUser;
 import com.tsd.armsystem.service.UpdateUserService;
 import lombok.AllArgsConstructor;
@@ -40,5 +41,13 @@ public class UpdateUserController {
         updateUserService.rejectUserUpdate(rejectUserUpdateDataRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PutMapping("/request")
+    public ResponseEntity<?> addUpdateUser(@RequestBody UserUpdateRequest userUpdateRequest){
+        updateUserService.addUpdateUser(userUpdateRequest);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+
 
 }

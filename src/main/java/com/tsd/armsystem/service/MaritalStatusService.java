@@ -1,6 +1,7 @@
 package com.tsd.armsystem.service;
 
 
+import com.tsd.armsystem.exception.MaritalStatusException;
 import com.tsd.armsystem.model.MaritalStatus;
 import com.tsd.armsystem.repository.MaritalStatusRepository;
 import lombok.AllArgsConstructor;
@@ -18,5 +19,11 @@ public class MaritalStatusService {
 
     public List<MaritalStatus> getAllMaritalStatus(){
         return maritalStatusRepository.findAll();
+    }
+
+    public MaritalStatus getMaritalStatusByStatus(String status){
+
+        return maritalStatusRepository.findByStatus(status).stream().findFirst().orElseThrow(()-> new MaritalStatusException("Marital Status Not Found"));
+
     }
 }
