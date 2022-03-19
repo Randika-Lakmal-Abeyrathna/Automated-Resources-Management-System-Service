@@ -1,5 +1,6 @@
 package com.tsd.armsystem.controller;
 
+import com.tsd.armsystem.dto.TeacherFormerExperienceRequest;
 import com.tsd.armsystem.dto.TeacherQualificationRequest;
 import com.tsd.armsystem.dto.TeacherRequest;
 import com.tsd.armsystem.dto.TeacherSubjectRequest;
@@ -54,6 +55,13 @@ public class TeacherController {
     @PostMapping("/teacherQualification/add")
     public ResponseEntity<?> addTeacherQualification(@RequestBody TeacherQualificationRequest teachersQualificationRequest){
         TeachersQualification teachersQualification = teacherService.addTeacherQualification(teachersQualificationRequest);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+
+    }
+
+    @PostMapping("/teacherFormerExperience/add")
+    public ResponseEntity<?> addTeacherFormerExperience(@RequestBody TeacherFormerExperienceRequest teacherFormerExperienceRequest){
+        FormerExperiance formerExperiance = teacherService.addTeacherFormerExperience(teacherFormerExperienceRequest);
         return new ResponseEntity<>(HttpStatus.CREATED);
 
     }
