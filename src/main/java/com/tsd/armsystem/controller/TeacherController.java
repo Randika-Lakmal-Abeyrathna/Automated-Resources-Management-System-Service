@@ -1,9 +1,8 @@
 package com.tsd.armsystem.controller;
 
 import com.tsd.armsystem.dto.TeacherRequest;
-import com.tsd.armsystem.model.FormerExperiance;
-import com.tsd.armsystem.model.School;
-import com.tsd.armsystem.model.Teacher;
+import com.tsd.armsystem.dto.TeacherSubjectRequest;
+import com.tsd.armsystem.model.*;
 import com.tsd.armsystem.service.TeacherService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -41,6 +40,13 @@ public class TeacherController {
     public ResponseEntity<Teacher> addTeacher(@RequestBody TeacherRequest teacherRequest){
         Teacher teacher = teacherService.addTeacher(teacherRequest);
         return new ResponseEntity<>(teacher, HttpStatus.CREATED);
+
+    }
+
+    @PostMapping("/teacherSubject/add")
+    public ResponseEntity<?> addTeacherSubject(@RequestBody TeacherSubjectRequest teacherSubjectRequest){
+        TeachersSubject teachersSubject = teacherService.addTeacherSubject(teacherSubjectRequest);
+        return new ResponseEntity<>(HttpStatus.CREATED);
 
     }
 

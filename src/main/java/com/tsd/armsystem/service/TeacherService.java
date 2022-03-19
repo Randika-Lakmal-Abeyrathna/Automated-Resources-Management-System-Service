@@ -3,10 +3,12 @@ package com.tsd.armsystem.service;
 import com.sun.source.tree.TryTree;
 import com.tsd.armsystem.dto.SchoolRequest;
 import com.tsd.armsystem.dto.TeacherRequest;
+import com.tsd.armsystem.dto.TeacherSubjectRequest;
 import com.tsd.armsystem.dto.UserResponse;
 import com.tsd.armsystem.exception.TeacherException;
 import com.tsd.armsystem.model.*;
 import com.tsd.armsystem.repository.TeacherRepository;
+import com.tsd.armsystem.repository.TeacherSubjectRepository;
 import lombok.AllArgsConstructor;
 import org.apache.catalina.LifecycleState;
 import org.springframework.stereotype.Service;
@@ -23,9 +25,11 @@ public class TeacherService {
 
     private final TeacherRepository teacherRepository;
     private final UserService userService;
+    private final SubjectService subjectService;
     private final TeacherExperienceService teacherExperienceService;
     private final SchoolService schoolService;
     private final TeacherTypeService teacherTypeService;
+    private final TeacherSubjectRepository teacherSubjectRepository;
 
     public Teacher getTeacherByUser(String nic) {
         User user = userService.getUserForTeacherByNIC(nic);
@@ -43,6 +47,10 @@ public class TeacherService {
         School school = schoolService.getSchoolById(SchoolId);
         return teacherRepository.findBySchool(school);
 
+    }
+
+    public Teacher getTeacherById(int id) {
+       return teacherRepository.findById(id).orElseThrow(()-> new TeacherException("Teacher Not Found"));
     }
 
     public Teacher addTeacher(TeacherRequest teacherRequest) {
@@ -69,5 +77,18 @@ public class TeacherService {
 
 
         return teacherRepository.save(teacher);
+    }
+
+    public TeachersSubject addTeacherSubject(TeacherSubjectRequest teacherSubjectRequest) {
+
+        TeachersSubject teachersSubject = new TeachersSubject();
+
+        Teacher teacher = getTeacherById(teacherSubjectRequest.getTeacherId());
+        teachersSubject.setTeacher(teacher);
+
+        Subjects subjects = subjectService.getSubjectById(teacherSubjectRequest.getSubjectId());
+        teachersSubject.setSubjects(subjects);
+
+        return teacherSubjectRepository.save(teachersSubject);
     }
 }
