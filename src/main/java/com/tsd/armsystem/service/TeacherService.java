@@ -1,12 +1,10 @@
 package com.tsd.armsystem.service;
 
 import com.sun.source.tree.TryTree;
-import com.tsd.armsystem.dto.SchoolRequest;
-import com.tsd.armsystem.dto.TeacherRequest;
-import com.tsd.armsystem.dto.TeacherSubjectRequest;
-import com.tsd.armsystem.dto.UserResponse;
+import com.tsd.armsystem.dto.*;
 import com.tsd.armsystem.exception.TeacherException;
 import com.tsd.armsystem.model.*;
+import com.tsd.armsystem.repository.TeacherQualificationRepository;
 import com.tsd.armsystem.repository.TeacherRepository;
 import com.tsd.armsystem.repository.TeacherSubjectRepository;
 import lombok.AllArgsConstructor;
@@ -30,6 +28,7 @@ public class TeacherService {
     private final SchoolService schoolService;
     private final TeacherTypeService teacherTypeService;
     private final TeacherSubjectRepository teacherSubjectRepository;
+    private final TeacherQualificationRepository teacherQualificationRepository;
 
     public Teacher getTeacherByUser(String nic) {
         User user = userService.getUserForTeacherByNIC(nic);
@@ -61,6 +60,7 @@ public class TeacherService {
         try {
             Date date1 = new SimpleDateFormat("yyyy/MM/dd").parse(appointmentDate);
             teacher.setAppointmentdate(date1);
+
             String retireDate = teacherRequest.getRetireDate();
             teacher.setRetiredate(retireDate);
         } catch (Exception e) {
@@ -90,5 +90,18 @@ public class TeacherService {
         teachersSubject.setSubjects(subjects);
 
         return teacherSubjectRepository.save(teachersSubject);
+    }
+
+    public TeachersQualification addTeacherQualification (TeacherQualificationRequest teacherQualificationRequest) {
+
+        TeachersQualification teachersQualification = new TeachersQualification();
+
+        Teacher teacher = getTeacherById(teacherQualificationRequest.getTeacherId());
+        teachersQualification.setTeacher(teacher);
+
+        String qualification = teacherQualificationRequest.getQualification();
+        teachersQualification.setQualification(qualification);
+
+        return teacherQualificationRepository.save(teachersQualification);
     }
 }
