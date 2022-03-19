@@ -4,6 +4,7 @@ import com.sun.source.tree.TryTree;
 import com.tsd.armsystem.dto.*;
 import com.tsd.armsystem.exception.TeacherException;
 import com.tsd.armsystem.model.*;
+import com.tsd.armsystem.repository.TeacherFormerExperienceRepository;
 import com.tsd.armsystem.repository.TeacherQualificationRepository;
 import com.tsd.armsystem.repository.TeacherRepository;
 import com.tsd.armsystem.repository.TeacherSubjectRepository;
@@ -29,6 +30,7 @@ public class TeacherService {
     private final TeacherTypeService teacherTypeService;
     private final TeacherSubjectRepository teacherSubjectRepository;
     private final TeacherQualificationRepository teacherQualificationRepository;
+    private final TeacherFormerExperienceRepository teacherFormerExperienceRepository;
 
     public Teacher getTeacherByUser(String nic) {
         User user = userService.getUserForTeacherByNIC(nic);
@@ -103,5 +105,31 @@ public class TeacherService {
         teachersQualification.setQualification(qualification);
 
         return teacherQualificationRepository.save(teachersQualification);
+    }
+
+    public FormerExperiance addTeacherFormerExperience (TeacherFormerExperienceRequest teacherFormerExperienceRequest) {
+
+        FormerExperiance formerExperiance = new FormerExperiance();
+
+        try {
+            String appointmentDate = teacherFormerExperienceRequest.getAppointmentDate();
+            Date date1 = new SimpleDateFormat("yyyy/MM/dd").parse(appointmentDate);
+            formerExperiance.setAppointntdate(date1);
+
+            String appointmentEndDate = teacherFormerExperienceRequest.getAppointmentEndDate();
+            Date date2 = new SimpleDateFormat("yyyy/MM/dd").parse(appointmentEndDate);
+            formerExperiance.setAppointmentenddate(date2);
+
+        } catch (Exception e) {
+            throw new TeacherException("Invalid date format");
+        }
+
+        School school = schoolService.getSchoolById(teacherFormerExperienceRequest.getSchoolId());
+        formerExperiance.setSchool(school);
+
+        Teacher teacher = getTeacherById(teacherFormerExperienceRequest.getTeacherId());
+        formerExperiance.setTeacher(teacher);
+
+        return teacherFormerExperienceRepository.save(formerExperiance);
     }
 }
