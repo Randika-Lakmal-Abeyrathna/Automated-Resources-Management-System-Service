@@ -3,6 +3,7 @@ package com.tsd.armsystem.controller;
 import com.tsd.armsystem.dto.ForgotPasswordRequest;
 import com.tsd.armsystem.dto.PasswordResetRequest;
 import com.tsd.armsystem.dto.UserResponse;
+import com.tsd.armsystem.dto.Userdto;
 import com.tsd.armsystem.model.User;
 import com.tsd.armsystem.service.UserService;
 import lombok.AllArgsConstructor;
@@ -35,5 +36,10 @@ public class UserController {
         return new ResponseEntity<>(user,HttpStatus.OK);
     }
 
+    @PostMapping("/register")
+    public ResponseEntity<?> newUserRegister(@RequestBody Userdto userRegister){
+        User addUser = userService.addNewUser(userRegister);
+        return new ResponseEntity<>(addUser,HttpStatus.CREATED);
+    }
 
 }
