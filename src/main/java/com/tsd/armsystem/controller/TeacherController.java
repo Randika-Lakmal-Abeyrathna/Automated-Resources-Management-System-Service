@@ -66,4 +66,10 @@ public class TeacherController {
 
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<Teacher>> getAllTeachers(){
+        List<Teacher> allTeaches = teacherService.getAllTeaches();
+        return new ResponseEntity<>(allTeaches,HttpStatus.OK);
+    }
+
 }
