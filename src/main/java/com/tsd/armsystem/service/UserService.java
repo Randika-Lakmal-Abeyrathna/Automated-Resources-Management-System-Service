@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -141,6 +143,45 @@ public class UserService {
         reg.setUserType(userRegister.getUserType());
 
         return userRepository.save(reg);
+    }
+
+    public void lockUser(String nic){
+        User user = userRepository.findByNic(nic).orElseThrow(() -> new UserException("User Not Found"));
+        user.setEnabled(false);
+        userRepository.save(user);
+    }
+
+    public List<UserResponse> getAllLockUsers(){
+        List<UserResponse> list = new ArrayList<>();
+
+        List<User> users = userRepository.findByEnabled(false);
+
+        for (User user: users) {
+            UserResponse userResponse = new UserResponse();
+
+            userResponse.setNic(user.getNic());
+            userResponse.setFirstName(user.getFirstName());
+            userResponse.setMiddleName(user.getMiddleName());
+            userResponse.setLastName(user.getLastName());
+            userResponse.setAddressNo(user.getAddressNo());
+            userResponse.setAddressStreet(user.getAddressStreet());
+            userResponse.setAddressStreet2(user.getAddressStreet2());
+            userResponse.setContactNumber1(user.getContactNumber1());
+            userResponse.setContactNumber2(user.getContactNumber2());
+            userResponse.setEmail(user.getEmail());
+            userResponse.setCity(user.getCity());
+            userResponse.setGender(user.getGender());
+            userResponse.setSalutation(user.getSalutation());
+            userResponse.setStatus(user.getStatus());
+            userResponse.setUserType(user.getUserType());
+            userResponse.setImageData(user.getImageData());
+            userResponse.setMaritalStatus(user.getMaritalStatus());
+
+            list.add(userResponse);
+
+        }
+
+        return list;
     }
 
 }
