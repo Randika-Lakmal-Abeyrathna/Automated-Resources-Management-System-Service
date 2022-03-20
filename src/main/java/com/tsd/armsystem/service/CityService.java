@@ -4,6 +4,7 @@ import com.tsd.armsystem.exception.CityException;
 import com.tsd.armsystem.model.City;
 import com.tsd.armsystem.repository.CityRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

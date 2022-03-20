@@ -1,12 +1,11 @@
 package com.tsd.armsystem.service;
 
 import com.tsd.armsystem.config.SecurityConfig;
-import com.tsd.armsystem.dto.ApproveUserUpdateDataRequest;
-import com.tsd.armsystem.dto.ForgotPasswordRequest;
-import com.tsd.armsystem.dto.PasswordResetRequest;
-import com.tsd.armsystem.dto.UserResponse;
+import com.tsd.armsystem.controller.CityController;
+import com.tsd.armsystem.dto.*;
 import com.tsd.armsystem.exception.UserException;
 import com.tsd.armsystem.model.*;
+import com.tsd.armsystem.repository.CityRepository;
 import com.tsd.armsystem.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -113,6 +112,35 @@ public class UserService {
         user.setLastmodifieddate(Instant.now());
 
         return userRepository.save(user);
+    }
+
+
+    public User addNewUser(Userdto userRegister) {
+
+        User reg = new User();
+
+        reg.setAddressStreet(userRegister.getAddressStreet());
+        reg.setAddressStreet2(userRegister.getAddressStreet2());
+
+        reg.setContactNumber1(userRegister.getContactNumber1());
+        reg.setContactNumber2(userRegister.getContactNumber2());
+        reg.setCreateddate(userRegister.getCreateddate());
+        reg.setEmail(userRegister.getEmail());
+        reg.setFirstName(userRegister.getFirstName());
+        reg.setGender(userRegister.getGender());
+        reg.setImageData(userRegister.getImageData());
+        reg.setLastmodifieddate(Instant.now());
+        reg.setLastName(userRegister.getLastName());
+        reg.setMaritalStatus(userRegister.getMaritalStatus());
+        reg.setMiddleName(userRegister.getMiddleName());
+        reg.setNic(userRegister.getNic());
+        reg.setPassword(userRegister.getPassword());
+        reg.setRoles(userRegister.getRoles());
+        reg.setSalutation(userRegister.getSalutation());
+        reg.setStatus(userRegister.getStatus());
+        reg.setUserType(userRegister.getUserType());
+
+        return userRepository.save(reg);
     }
 
 }
