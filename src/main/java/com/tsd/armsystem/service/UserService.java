@@ -154,7 +154,7 @@ public class UserService {
 
     public void unlockUser(String nic){
         User user = userRepository.findByNic(nic).orElseThrow(() -> new UserException("User Not Found"));
-        user.setEnabled(false);
+        user.setEnabled(true);
         user.setLastmodifieddate(Instant.now());
         userRepository.save(user);
     }
