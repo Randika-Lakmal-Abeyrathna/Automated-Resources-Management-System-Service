@@ -148,6 +148,14 @@ public class UserService {
     public void lockUser(String nic){
         User user = userRepository.findByNic(nic).orElseThrow(() -> new UserException("User Not Found"));
         user.setEnabled(false);
+        user.setLastmodifieddate(Instant.now());
+        userRepository.save(user);
+    }
+
+    public void unlockUser(String nic){
+        User user = userRepository.findByNic(nic).orElseThrow(() -> new UserException("User Not Found"));
+        user.setEnabled(false);
+        user.setLastmodifieddate(Instant.now());
         userRepository.save(user);
     }
 

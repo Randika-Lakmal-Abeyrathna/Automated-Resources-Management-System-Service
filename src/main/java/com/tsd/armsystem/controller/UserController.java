@@ -57,4 +57,10 @@ public class UserController {
         return new ResponseEntity<>(allLockUsers,HttpStatus.OK);
     }
 
+    @GetMapping("/unlock/{nic}")
+    public ResponseEntity<?> unlockUser(@PathVariable String nic){
+        userService.unlockUser(nic);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }
