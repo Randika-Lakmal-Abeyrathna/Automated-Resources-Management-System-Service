@@ -192,4 +192,9 @@ public class UserService {
         return list;
     }
 
+    public boolean isUserLocked(String nic){
+        User user = userRepository.findByNic(nic).orElseThrow(() -> new UserException("User Not Found"));
+        return user.isEnabled();
+    }
+
 }

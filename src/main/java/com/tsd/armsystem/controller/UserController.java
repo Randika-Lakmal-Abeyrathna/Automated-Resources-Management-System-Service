@@ -63,4 +63,9 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("/isLock/{nic}")
+    public boolean isLocked(@PathVariable String nic){
+        return userService.isUserLocked(nic);
+    }
+
 }
