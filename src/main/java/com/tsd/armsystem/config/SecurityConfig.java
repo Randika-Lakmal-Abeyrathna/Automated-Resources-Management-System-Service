@@ -27,6 +27,14 @@ import java.util.Random;
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private static final String[] AUTH_LIST = {
+            // -- swagger ui
+            "/swagger-resources/**",
+            "/swagger-ui.html**",
+            "/webjars/**",
+            "favicon.ico"
+    };
+
     private final UserPrincipleService userPrincipleService;
 
     @Autowired
@@ -44,6 +52,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager()))
                 .addFilterAfter(new JwtTokenVerifier(),JwtUsernameAndPasswordAuthenticationFilter.class)
                 .authorizeRequests()
+//                .antMatchers(AUTH_LIST).authenticated()
+                .antMatchers("/swagger-resources/**","/swagger-ui.html**","/webjars/**","favicon.ico","/swagger-ui/*","/v2/api-docs","/v2/api-docs/**").permitAll()
                 .antMatchers("/login")
                 .permitAll()
                 .antMatchers("/api/user/forgot")
