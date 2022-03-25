@@ -1,12 +1,12 @@
 package com.tsd.armsystem.service;
 
 import com.tsd.armsystem.config.SecurityConfig;
-import com.tsd.armsystem.dto.ApproveUserUpdateDataRequest;
-import com.tsd.armsystem.dto.ForgotPasswordRequest;
-import com.tsd.armsystem.dto.PasswordResetRequest;
-import com.tsd.armsystem.dto.UserResponse;
+import com.tsd.armsystem.dto.*;
 import com.tsd.armsystem.exception.UserException;
-import com.tsd.armsystem.model.*;
+import com.tsd.armsystem.model.City;
+import com.tsd.armsystem.model.NotificationEmail;
+import com.tsd.armsystem.model.User;
+import com.tsd.armsystem.repository.CityRepository;
 import com.tsd.armsystem.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -23,6 +25,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
+
+    private CityRepository cityRepository;
 
     public void resetPassword(PasswordResetRequest passwordResetRequest){
         validatePassword(passwordResetRequest);
@@ -113,6 +117,89 @@ public class UserService {
         user.setLastmodifieddate(Instant.now());
 
         return userRepository.save(user);
+    }
+
+
+    public User addNewUser(Userdto userRegister) {
+
+        User reg = new User();
+
+        reg.setAddressStreet(userRegister.getAddressStreet());
+        reg.setAddressStreet2(userRegister.getAddressStreet2());
+        City c =cityRepository.findbyCity(userRegister.getCity());
+        reg.setCity(c);
+
+        reg.setContactNumber1(userRegister.getContactNumber1());
+        reg.setContactNumber2(userRegister.getContactNumber2());
+        reg.setCreateddate(userRegister.getCreateddate());
+        reg.setEmail(userRegister.getEmail());
+        reg.setFirstName(userRegister.getFirstName());
+        reg.setGender(userRegister.getGender());
+        reg.setImageData(userRegister.getImageData());
+        reg.setLastmodifieddate(Instant.now());
+        reg.setLastName(userRegister.getLastName());
+        reg.setMaritalStatus(userRegister.getMaritalStatus());
+        reg.setMiddleName(userRegister.getMiddleName());
+        reg.setNic(userRegister.getNic());
+        reg.setPassword(userRegister.getPassword());
+        reg.setRoles(userRegister.getRoles());
+        reg.setSalutation(userRegister.getSalutation());
+        reg.setStatus(userRegister.getStatus());
+        reg.setUserType(userRegister.getUserType());
+
+        return userRepository.save(reg);
+    }
+
+    public void lockUser(String nic){
+        User user = userRepository.findByNic(nic).orElseThrow(() -> new UserException("User Not Found"));
+        user.setEnabled(false);
+        user.setLastmodifieddate(Instant.now());
+        userRepository.save(user);
+    }
+
+    public void unlockUser(String nic){
+        User user = userRepository.findByNic(nic).orElseThrow(() -> new UserException("User Not Found"));
+        user.setEnabled(true);
+        user.setLastmodifieddate(Instant.now());
+        userRepository.save(user);
+    }
+
+    public List<UserResponse> getAllLockUsers(){
+        List<UserResponse> list = new ArrayList<>();
+
+        List<User> users = userRepository.findByEnabled(false);
+
+        for (User user: users) {
+            UserResponse userResponse = new UserResponse();
+
+            userResponse.setNic(user.getNic());
+            userResponse.setFirstName(user.getFirstName());
+            userResponse.setMiddleName(user.getMiddleName());
+            userResponse.setLastName(user.getLastName());
+            userResponse.setAddressNo(user.getAddressNo());
+            userResponse.setAddressStreet(user.getAddressStreet());
+            userResponse.setAddressStreet2(user.getAddressStreet2());
+            userResponse.setContactNumber1(user.getContactNumber1());
+            userResponse.setContactNumber2(user.getContactNumber2());
+            userResponse.setEmail(user.getEmail());
+            userResponse.setCity(user.getCity());
+            userResponse.setGender(user.getGender());
+            userResponse.setSalutation(user.getSalutation());
+            userResponse.setStatus(user.getStatus());
+            userResponse.setUserType(user.getUserType());
+            userResponse.setImageData(user.getImageData());
+            userResponse.setMaritalStatus(user.getMaritalStatus());
+
+            list.add(userResponse);
+
+        }
+
+        return list;
+    }
+
+    public boolean isUserLocked(String nic){
+        User user = userRepository.findByNic(nic).orElseThrow(() -> new UserException("User Not Found"));
+        return user.isEnabled();
     }
 
 }

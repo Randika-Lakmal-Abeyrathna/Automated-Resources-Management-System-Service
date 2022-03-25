@@ -65,11 +65,17 @@ public class TeacherController {
 
     }
 
+
     @PostMapping("/teacherTransfer/add")
     public ResponseEntity<?> addTeacherRequest(@RequestBody TeacherTransferRequest teacherTransferRequest){
         Request request = teacherTransferService.addTeacherRequest(teacherTransferRequest);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<Teacher>> getAllTeachers(){
+        List<Teacher> allTeaches = teacherService.getAllTeaches();
+        return new ResponseEntity<>(allTeaches,HttpStatus.OK);
     }
 
 }

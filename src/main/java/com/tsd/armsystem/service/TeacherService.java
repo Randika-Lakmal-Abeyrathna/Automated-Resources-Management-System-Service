@@ -132,4 +132,8 @@ public class TeacherService {
 
         return teacherFormerExperienceRepository.save(formerExperiance);
     }
+
+    public List<Teacher> getAllTeaches(){
+        return teacherRepository.findAll();
+    }
 }

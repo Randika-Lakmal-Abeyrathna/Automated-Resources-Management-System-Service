@@ -1,15 +1,15 @@
 package com.tsd.armsystem.repository;
 
+import com.tsd.armsystem.model.AdminProvince;
 import com.tsd.armsystem.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User,String> {
-    Optional<User> findByNic(String nic);
+public interface AdminProvinceRepository extends JpaRepository<AdminProvince,Integer> {
 
-    List<User> findByEnabled(boolean flag);
+    List<AdminProvince> findByUser(User user);
+
 }

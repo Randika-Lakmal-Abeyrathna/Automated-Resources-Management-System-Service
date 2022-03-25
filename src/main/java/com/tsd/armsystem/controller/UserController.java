@@ -3,12 +3,15 @@ package com.tsd.armsystem.controller;
 import com.tsd.armsystem.dto.ForgotPasswordRequest;
 import com.tsd.armsystem.dto.PasswordResetRequest;
 import com.tsd.armsystem.dto.UserResponse;
+import com.tsd.armsystem.dto.Userdto;
 import com.tsd.armsystem.model.User;
 import com.tsd.armsystem.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/user")
@@ -35,5 +38,34 @@ public class UserController {
         return new ResponseEntity<>(user,HttpStatus.OK);
     }
 
+    @PostMapping("/register")
+    public ResponseEntity<?> newUserRegister(@RequestBody Userdto userRegister){
+        User addUser = userService.addNewUser(userRegister);
+        return new ResponseEntity<>(addUser,HttpStatus.CREATED);
+    }
+
+    @GetMapping("/lock/{nic}")
+    public ResponseEntity<?> lockUser(@PathVariable String nic){
+        userService.lockUser(nic);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/lock/all")
+    public ResponseEntity<List<UserResponse>> getAllLockedUsers(){
+        List<UserResponse> allLockUsers = userService.getAllLockUsers();
+
+        return new ResponseEntity<>(allLockUsers,HttpStatus.OK);
+    }
+
+    @GetMapping("/unlock/{nic}")
+    public ResponseEntity<?> unlockUser(@PathVariable String nic){
+        userService.unlockUser(nic);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/isLock/{nic}")
+    public boolean isLocked(@PathVariable String nic){
+        return userService.isUserLocked(nic);
+    }
 
 }
