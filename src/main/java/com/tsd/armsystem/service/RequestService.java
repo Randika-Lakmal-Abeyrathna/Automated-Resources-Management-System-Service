@@ -18,7 +18,7 @@ public class RequestService {
     private final ProvinceService provinceService;
 
     public List<Request> getAllZonalRequest(Integer provinceId){
-        String type = "zonal";
+        String type = "provincial";
         Province province = provinceService.getProvinceById(provinceId);
 //        Status => 0 --> pending status
         List<Request> list = requestRepository.findByTypeAndProvinceAndStatus(type,province,0);
