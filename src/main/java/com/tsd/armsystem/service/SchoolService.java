@@ -44,5 +44,9 @@ public class SchoolService {
           return schoolRepository.save(school);
      }
 
+     public List<School> getAllSchools(){
+          return schoolRepository.findAll();
+     }
+
 
 }

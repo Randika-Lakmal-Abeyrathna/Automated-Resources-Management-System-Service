@@ -1,10 +1,8 @@
 package com.tsd.armsystem.controller;
 
-import com.tsd.armsystem.dto.TeacherFormerExperienceRequest;
-import com.tsd.armsystem.dto.TeacherQualificationRequest;
-import com.tsd.armsystem.dto.TeacherRequest;
-import com.tsd.armsystem.dto.TeacherSubjectRequest;
+import com.tsd.armsystem.dto.*;
 import com.tsd.armsystem.model.*;
+import com.tsd.armsystem.service.TeacherTransferService;
 import com.tsd.armsystem.service.TeacherService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,6 +17,7 @@ import java.util.List;
 public class TeacherController {
 
     private final TeacherService teacherService;
+    private final TeacherTransferService teacherTransferService;
 
     @GetMapping("/find/{nic}")
     public ResponseEntity<Teacher> getTeacherByNic(@PathVariable String nic){
@@ -64,6 +63,13 @@ public class TeacherController {
         FormerExperiance formerExperiance = teacherService.addTeacherFormerExperience(teacherFormerExperienceRequest);
         return new ResponseEntity<>(HttpStatus.CREATED);
 
+    }
+
+
+    @PostMapping("/teacherTransfer/add")
+    public ResponseEntity<?> addTeacherRequest(@RequestBody TeacherTransferRequest teacherTransferRequest){
+        Request request = teacherTransferService.addTeacherRequest(teacherTransferRequest);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping("/all")
