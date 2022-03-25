@@ -32,4 +32,10 @@ public class SchoolController {
 
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<School>> getAllSchools(){
+        List<School> allSchools = schoolService.getAllSchools();
+        return new ResponseEntity<>(allSchools, HttpStatus.CREATED);
+    }
+
 }

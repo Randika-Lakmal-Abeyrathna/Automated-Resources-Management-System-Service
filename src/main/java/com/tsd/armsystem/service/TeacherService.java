@@ -60,7 +60,7 @@ public class TeacherService {
 
         String appointmentDate = teacherRequest.getAppointmentDate();
         try {
-            Date date1 = new SimpleDateFormat("yyyy/MM/dd").parse(appointmentDate);
+            Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(appointmentDate);
             teacher.setAppointmentdate(date1);
 
             String retireDate = teacherRequest.getRetireDate();
@@ -113,11 +113,11 @@ public class TeacherService {
 
         try {
             String appointmentDate = teacherFormerExperienceRequest.getAppointmentDate();
-            Date date1 = new SimpleDateFormat("yyyy/MM/dd").parse(appointmentDate);
+            Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(appointmentDate);
             formerExperiance.setAppointntdate(date1);
 
             String appointmentEndDate = teacherFormerExperienceRequest.getAppointmentEndDate();
-            Date date2 = new SimpleDateFormat("yyyy/MM/dd").parse(appointmentEndDate);
+            Date date2 = new SimpleDateFormat("yyyy-MM-dd").parse(appointmentEndDate);
             formerExperiance.setAppointmentenddate(date2);
 
         } catch (Exception e) {
