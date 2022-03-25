@@ -1,10 +1,11 @@
 package com.tsd.armsystem.service;
 
 import com.tsd.armsystem.config.SecurityConfig;
-import com.tsd.armsystem.controller.CityController;
 import com.tsd.armsystem.dto.*;
 import com.tsd.armsystem.exception.UserException;
-import com.tsd.armsystem.model.*;
+import com.tsd.armsystem.model.City;
+import com.tsd.armsystem.model.NotificationEmail;
+import com.tsd.armsystem.model.User;
 import com.tsd.armsystem.repository.CityRepository;
 import com.tsd.armsystem.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
+
+    private CityRepository cityRepository;
 
     public void resetPassword(PasswordResetRequest passwordResetRequest){
         validatePassword(passwordResetRequest);
@@ -123,6 +126,8 @@ public class UserService {
 
         reg.setAddressStreet(userRegister.getAddressStreet());
         reg.setAddressStreet2(userRegister.getAddressStreet2());
+        City c =cityRepository.findbyCity(userRegister.getCity());
+        reg.setCity(c);
 
         reg.setContactNumber1(userRegister.getContactNumber1());
         reg.setContactNumber2(userRegister.getContactNumber2());
