@@ -1,5 +1,6 @@
 package com.tsd.armsystem.service;
 
+import com.tsd.armsystem.exception.RequestException;
 import com.tsd.armsystem.model.Province;
 import com.tsd.armsystem.model.Request;
 import com.tsd.armsystem.repository.RequestRepository;
@@ -23,5 +24,9 @@ public class RequestService {
 //        Status => 0 --> pending status
         List<Request> list = requestRepository.findByTypeAndProvinceAndStatus(type,province,0);
         return list;
+    }
+
+    public Request getRequestById(Integer id){
+        return requestRepository.findById(id).orElseThrow(()-> new RequestException("Transfer Request NotFound"));
     }
 }

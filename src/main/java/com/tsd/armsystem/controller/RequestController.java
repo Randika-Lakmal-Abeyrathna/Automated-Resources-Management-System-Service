@@ -27,4 +27,10 @@ public class RequestController {
         return new ResponseEntity<>(allZonalRequest,HttpStatus.OK);
     }
 
+    @GetMapping("/find/{id}")
+    public ResponseEntity<Request> getRequestById(@PathVariable Integer id){
+        Request requestById = requestService.getRequestById(id);
+        return new ResponseEntity<>(requestById,HttpStatus.OK);
+    }
+
 }
