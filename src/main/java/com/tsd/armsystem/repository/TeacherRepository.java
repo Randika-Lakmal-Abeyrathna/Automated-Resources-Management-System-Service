@@ -1,5 +1,6 @@
 package com.tsd.armsystem.repository;
 
+import com.tsd.armsystem.model.Request;
 import com.tsd.armsystem.model.School;
 import com.tsd.armsystem.model.Teacher;
 import com.tsd.armsystem.model.User;
@@ -17,4 +18,6 @@ public interface TeacherRepository extends JpaRepository<Teacher,Integer> {
     Optional<Teacher> findById(Integer id);
 
     List<Teacher> findBySchool(School school);
+
+    List<Teacher> findByUserNic(Teacher teacher);
 }
