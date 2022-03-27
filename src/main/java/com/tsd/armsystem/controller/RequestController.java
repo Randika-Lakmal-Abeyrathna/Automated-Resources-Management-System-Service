@@ -1,6 +1,7 @@
 package com.tsd.armsystem.controller;
 
 
+import com.tsd.armsystem.model.Carder;
 import com.tsd.armsystem.model.Request;
 import com.tsd.armsystem.service.RequestService;
 import lombok.AllArgsConstructor;
@@ -31,6 +32,12 @@ public class RequestController {
     public ResponseEntity<Request> getRequestById(@PathVariable Integer id){
         Request requestById = requestService.getRequestById(id);
         return new ResponseEntity<>(requestById,HttpStatus.OK);
+    }
+
+    @GetMapping("/suggest/{id}")
+    public ResponseEntity<List<Carder>> getSelectedSchoolsForRequestId(@PathVariable Integer id){
+        List<Carder> suggestedSchoolsByRequestId = requestService.getSuggestedSchoolsByRequestId(id);
+        return new ResponseEntity<>(suggestedSchoolsByRequestId,HttpStatus.OK);
     }
 
 }
