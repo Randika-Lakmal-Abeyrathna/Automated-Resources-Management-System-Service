@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
@@ -14,4 +16,8 @@ public class TeacherRequest {
     private String appointmentDate;
     private String retireDate;
     private int teacherTypeId;
+
+    private TeacherQualificationRequest teacherQualificationRequest;
+    private List<TeacherSubjectRequest> teacherSubjectRequest;
+    private List<TeacherFormerExperienceRequest> teacherFormerExperienceRequest;
 }

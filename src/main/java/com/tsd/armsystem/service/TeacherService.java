@@ -3,6 +3,7 @@ package com.tsd.armsystem.service;
 import com.sun.source.tree.TryTree;
 import com.tsd.armsystem.dto.*;
 import com.tsd.armsystem.exception.TeacherException;
+import com.tsd.armsystem.exception.TeacherTransferException;
 import com.tsd.armsystem.model.*;
 import com.tsd.armsystem.repository.TeacherFormerExperienceRepository;
 import com.tsd.armsystem.repository.TeacherQualificationRepository;
@@ -10,6 +11,8 @@ import com.tsd.armsystem.repository.TeacherRepository;
 import com.tsd.armsystem.repository.TeacherSubjectRepository;
 import lombok.AllArgsConstructor;
 import org.apache.catalina.LifecycleState;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -54,31 +57,62 @@ public class TeacherService {
        return teacherRepository.findById(id).orElseThrow(()-> new TeacherException("Teacher Not Found"));
     }
 
-    public Teacher addTeacher(TeacherRequest teacherRequest) {
+    public ResponseEntity<Teacher>  addTeacher(TeacherRequest teacherRequest) {
 
         Teacher teacher = new Teacher();
 
-        String appointmentDate = teacherRequest.getAppointmentDate();
-        try {
-            Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(appointmentDate);
-            teacher.setAppointmentdate(date1);
+        Teacher teacher1 = getTeacherByUser(teacherRequest.getUserNic());
 
-            String retireDate = teacherRequest.getRetireDate();
-            teacher.setRetiredate(retireDate);
-        } catch (Exception e) {
-            throw new TeacherException("Invalid date format");
+        if (teacher1.getId() != 0){
+//            throw new TeacherException("This user is already registered");
+            Response response = new Response();
+            response.setMessage("This user is already registered");
+            response.setStatus(200);
+            return new ResponseEntity(response,HttpStatus.OK);
+
+        } else {
+
+            String appointmentDate = teacherRequest.getAppointmentDate();
+            try {
+                Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(appointmentDate);
+                teacher.setAppointmentdate(date1);
+
+                String retireDate = teacherRequest.getRetireDate();
+                teacher.setRetiredate(retireDate);
+            } catch (Exception e) {
+                throw new TeacherException("Invalid date format");
+            }
+            User user = userService.getUserForTeacherByNIC(teacherRequest.getUserNic());
+            teacher.setUser(user);
+
+            School school = schoolService.getSchoolById(teacherRequest.getSchoolId());
+            teacher.setSchool(school);
+
+            TeacherType teacherType = teacherTypeService.getTeacherTypeById(teacherRequest.getTeacherTypeId());
+            teacher.setTeacherType(teacherType);
+
+            Teacher saved = teacherRepository.save(teacher);
+
+            TeacherQualificationRequest teachersQualification = new TeacherQualificationRequest();
+
+            teachersQualification.setQualification(teacherRequest.getTeacherQualificationRequest().getQualification());
+            teachersQualification.setTeacherId(saved.getId());
+            addTeacherQualification(teachersQualification);
+
+            for (TeacherSubjectRequest teacherSubjectRequest : teacherRequest.getTeacherSubjectRequest()) {
+
+                teacherSubjectRequest.setTeacherId(saved.getId());
+                addTeacherSubject(teacherSubjectRequest);
+            }
+
+            for (TeacherFormerExperienceRequest teacherFormerExperienceRequest : teacherRequest.getTeacherFormerExperienceRequest()) {
+
+                teacherFormerExperienceRequest.setTeacherId(saved.getId());
+                addTeacherFormerExperience(teacherFormerExperienceRequest);
+            }
+
+            return new ResponseEntity<>(saved, HttpStatus.CREATED);
         }
-        User user = userService.getUserForTeacherByNIC(teacherRequest.getUserNic());
-        teacher.setUser(user);
-
-        School school = schoolService.getSchoolById(teacherRequest.getSchoolId());
-        teacher.setSchool(school);
-
-        TeacherType teacherType = teacherTypeService.getTeacherTypeById(teacherRequest.getTeacherTypeId());
-        teacher.setTeacherType(teacherType);
-
-
-        return teacherRepository.save(teacher);
     }
 
     public TeachersSubject addTeacherSubject(TeacherSubjectRequest teacherSubjectRequest) {
