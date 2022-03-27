@@ -1,5 +1,6 @@
 package com.tsd.armsystem.service;
 
+import com.tsd.armsystem.dto.RequestOnboardingRequest;
 import com.tsd.armsystem.exception.RequestException;
 import com.tsd.armsystem.model.*;
 import com.tsd.armsystem.repository.*;
@@ -7,10 +8,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -20,6 +20,9 @@ public class RequestService {
     private final RequestRepository requestRepository;
     private final ProvinceService provinceService;
     private final CarderRepository carderRepository;
+    private final RequestOnboadingRepository requestOnboadingRepository;
+    private final CarderService carderService;
+    private final MailService mailService;
 
 
     public List<Request> getAllZonalRequest(Integer provinceId){
@@ -53,5 +56,42 @@ public class RequestService {
         }
 
         return selectedCarderDetails;
+    }
+
+
+    public void approveRequest(RequestOnboardingRequest requestOnboardingRequest){
+        Request request = getRequestById(requestOnboardingRequest.getRequestId());
+
+//        Status --> approve -->1
+        request.setStatus(1);
+        Request updatedRequest = requestRepository.save(request);
+
+        RequestOnboarding requestOnboarding = new RequestOnboarding();
+        requestOnboarding.setRequest(updatedRequest);
+        String requestDate = requestOnboardingRequest.getDate();
+        try{
+
+            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(requestDate);
+            requestOnboarding.setAppointmentDate(date);
+        } catch (ParseException e) {
+            throw new RequestException("Invalid Data format");
+        }
+//        Status -->pending --> 0
+        requestOnboarding.setStatus(0);
+
+        Carder carder = carderService.getCarderById(requestOnboardingRequest.getCarderId());
+        carder.setCurrent(carder.getCurrent()+1);
+
+        Carder updatedCarder = carderRepository.save(carder);
+
+        requestOnboarding.setCarder(updatedCarder);
+
+        requestOnboadingRepository.save(requestOnboarding);
+
+        String teacherEmail = request.getTeacher().getUser().getEmail();
+
+        mailService.sendMail(new NotificationEmail(teacherEmail,"Transfer Request Approved.","Requested Transfer is approved. \n " +
+                "School Name : "+carder.getSchool().getName()+" and Appointment date is on : "+requestDate+" "));
+
     }
 }

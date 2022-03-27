@@ -31,7 +31,8 @@ public class MailService {
 
         try{
             javaMailSender.send(mimeMessagePreparator);
-            log.info("Activation email sent!");
+//            log.info("Activation email sent!");
+
         }catch (MailException e){
             e.printStackTrace();
             // throw new EmailException("Exception occurred when sending email to "+notificationEmail.getRecipient());

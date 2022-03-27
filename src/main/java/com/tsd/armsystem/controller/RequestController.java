@@ -1,16 +1,14 @@
 package com.tsd.armsystem.controller;
 
 
+import com.tsd.armsystem.dto.RequestOnboardingRequest;
 import com.tsd.armsystem.model.Carder;
 import com.tsd.armsystem.model.Request;
 import com.tsd.armsystem.service.RequestService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -38,6 +36,12 @@ public class RequestController {
     public ResponseEntity<List<Carder>> getSelectedSchoolsForRequestId(@PathVariable Integer id){
         List<Carder> suggestedSchoolsByRequestId = requestService.getSuggestedSchoolsByRequestId(id);
         return new ResponseEntity<>(suggestedSchoolsByRequestId,HttpStatus.OK);
+    }
+
+    @PostMapping("/approve")
+    public ResponseEntity<?> approveTeacherRequest(@RequestBody RequestOnboardingRequest request){
+        requestService.approveRequest(request);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
