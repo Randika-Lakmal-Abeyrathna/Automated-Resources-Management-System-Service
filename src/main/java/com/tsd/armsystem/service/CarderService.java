@@ -1,6 +1,7 @@
 package com.tsd.armsystem.service;
 
 import com.tsd.armsystem.dto.CarderRequest;
+import com.tsd.armsystem.exception.CarderException;
 import com.tsd.armsystem.exception.SchoolException;
 import com.tsd.armsystem.model.Carder;
 import com.tsd.armsystem.model.School;
@@ -38,6 +39,10 @@ public class CarderService {
 
         return carderRepository.save(carder);
 
+    }
+
+    public Carder getCarderById(Integer id){
+        return carderRepository.findByIdcarder(id).orElseThrow(()-> new CarderException("Carder Not Found"));
     }
 
 }
