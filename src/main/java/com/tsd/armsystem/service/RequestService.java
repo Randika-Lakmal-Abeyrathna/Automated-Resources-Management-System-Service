@@ -2,6 +2,7 @@ package com.tsd.armsystem.service;
 
 import com.tsd.armsystem.dto.RequestOnboardingRequest;
 import com.tsd.armsystem.exception.RequestException;
+import com.tsd.armsystem.exception.RequestOnBoardingException;
 import com.tsd.armsystem.model.*;
 import com.tsd.armsystem.repository.*;
 import lombok.AllArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.*;
 
 @Service
@@ -20,9 +22,12 @@ public class RequestService {
     private final RequestRepository requestRepository;
     private final ProvinceService provinceService;
     private final CarderRepository carderRepository;
-    private final RequestOnboadingRepository requestOnboadingRepository;
+    private final RequestOnboardingRepository requestOnboadingRepository;
     private final CarderService carderService;
     private final MailService mailService;
+    private final SchoolService schoolService;
+    private final FormerExperienceRepository formerExperienceRepository;
+    private final TeacherRepository teacherRepository;
 
 
     public List<Request> getAllZonalRequest(Integer provinceId){
@@ -94,4 +99,60 @@ public class RequestService {
                 "School Name : "+carder.getSchool().getName()+" and Appointment date is on : "+requestDate+" "));
 
     }
+
+    public List<RequestOnboarding> getAllPendingOnBoardingRequestsBySchoolId(Integer schoolId){
+        School school = schoolService.getSchoolById(schoolId);
+        List<Carder> carderList = carderService.getCarderBySchool(school);
+
+        List<RequestOnboarding> allPendingOnBoardingRequests = new ArrayList<>();
+
+        for (Carder c: carderList) {
+            List<RequestOnboarding> requestOnboardingList = requestOnboadingRepository.findByCarderAndStatus(c, 0);
+
+            for (RequestOnboarding r: requestOnboardingList
+                 ) {
+                allPendingOnBoardingRequests.add(r);
+            }
+
+        }
+
+
+        return allPendingOnBoardingRequests;
+    }
+
+
+    public void approveOnBoardingTeacher(Integer id){
+        RequestOnboarding onboarding = requestOnboadingRepository.findById(id).orElseThrow(() -> new RequestOnBoardingException("On Board request not found"));
+
+        Teacher teacher = onboarding.getRequest().getTeacher();
+
+        // save Former experience
+        FormerExperiance formerExperiance = new FormerExperiance();
+        formerExperiance.setTeacher(teacher);
+        formerExperiance.setAppointntdate(teacher.getAppointmentdate());
+        formerExperiance.setSchool(teacher.getSchool());
+        try{
+            formerExperiance.setAppointmentenddate(new SimpleDateFormat("yyyy-MM-dd").parse(new SimpleDateFormat("yyyy-MM-dd").format(new Date())));
+        }catch (ParseException e) {
+            throw new RequestException("Invalid Data format");
+        }
+
+
+        formerExperienceRepository.save(formerExperiance);
+
+        // Update Teacher Table
+        teacher.setSchool(onboarding.getCarder().getSchool());
+        teacher.setAppointmentdate(onboarding.getAppointmentDate());
+
+        teacherRepository.save(teacher);
+
+        // Update Onboard request
+        // Status --> Approve -->1
+        onboarding.setStatus(1);
+        requestOnboadingRepository.save(onboarding);
+
+    }
+
+
+
 }
