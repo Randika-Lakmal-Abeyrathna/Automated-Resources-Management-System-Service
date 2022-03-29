@@ -2,6 +2,7 @@ package com.tsd.armsystem.controller;
 
 import com.tsd.armsystem.dto.*;
 import com.tsd.armsystem.model.*;
+import com.tsd.armsystem.service.RequestService;
 import com.tsd.armsystem.service.TeacherTransferService;
 import com.tsd.armsystem.service.TeacherService;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,7 @@ public class TeacherController {
 
     private final TeacherService teacherService;
     private final TeacherTransferService teacherTransferService;
+    private final RequestService requestService;
 
     @GetMapping("/find/{nic}")
     public ResponseEntity<Teacher> getTeacherByNic(@PathVariable String nic){
@@ -74,6 +76,18 @@ public class TeacherController {
     public ResponseEntity<List<Teacher>> getAllTeachers(){
         List<Teacher> allTeaches = teacherService.getAllTeaches();
         return new ResponseEntity<>(allTeaches,HttpStatus.OK);
+    }
+
+    @GetMapping("/find/onboarding/{schoolid}")
+    public ResponseEntity<List<RequestOnboarding>> getAllApprovedPendingOnBoardingTeachers(@PathVariable Integer schoolid){
+        List<RequestOnboarding> allPendingOnBoardingRequestsBySchoolId = requestService.getAllPendingOnBoardingRequestsBySchoolId(schoolid);
+        return new ResponseEntity<>(allPendingOnBoardingRequestsBySchoolId,HttpStatus.OK);
+    }
+
+    @GetMapping("/approve/onboarding/{requestOnBoardId}")
+    public ResponseEntity<?> approveOnBoardingTeachers(@PathVariable Integer requestOnBoardId){
+        requestService.approveOnBoardingTeacher(requestOnBoardId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
