@@ -26,6 +26,12 @@ public class RequestController {
         return new ResponseEntity<>(allZonalRequest,HttpStatus.OK);
     }
 
+    @GetMapping("/all/nonzonal/")
+    public ResponseEntity<List<Request>> getAllNonZonalRequests(){
+        List<Request> allNonZonalRequest = requestService.getAllNonZonalRequest();
+        return new ResponseEntity<>(allNonZonalRequest,HttpStatus.OK);
+    }
+
     @GetMapping("/find/{id}")
     public ResponseEntity<Request> getRequestById(@PathVariable Integer id){
         Request requestById = requestService.getRequestById(id);
