@@ -38,6 +38,14 @@ public class RequestService {
         return list;
     }
 
+    public List<Request> getAllNonZonalRequest(){
+        String type ="all";
+//        Status => 0 --> pending status
+        List<Request> list = requestRepository.findByTypeAndStatus(type, 0);
+
+        return list;
+    }
+
     public Request getRequestById(Integer id){
         return requestRepository.findById(id).orElseThrow(()-> new RequestException("Transfer Request NotFound"));
     }

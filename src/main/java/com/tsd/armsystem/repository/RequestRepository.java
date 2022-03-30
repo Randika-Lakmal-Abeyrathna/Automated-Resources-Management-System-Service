@@ -13,5 +13,7 @@ public interface RequestRepository extends JpaRepository<Request,Integer> {
 
     List<Request> findByTypeAndProvinceAndStatus(String Type, Province province,Integer status);
 
+    List<Request> findByTypeAndStatus(String type,Integer status);
+
     Optional<Request> findById(Integer id);
 }
