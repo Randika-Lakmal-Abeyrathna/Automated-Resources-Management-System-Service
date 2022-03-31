@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -19,5 +20,8 @@ public class SchoolTypeService {
           return schoolTypeRepository.findById(schoolTypeId).orElseThrow(()-> new SchoolException("School Type Not Found"));
      }
 
+     public List<SchoolType> getAllSchoolType(){
+          return schoolTypeRepository.findAll();
+     }
 
 }
