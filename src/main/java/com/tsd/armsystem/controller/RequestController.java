@@ -26,7 +26,7 @@ public class RequestController {
         return new ResponseEntity<>(allZonalRequest,HttpStatus.OK);
     }
 
-    @GetMapping("/all/nonzonal/")
+    @GetMapping("/all/nonzonal")
     public ResponseEntity<List<Request>> getAllNonZonalRequests(){
         List<Request> allNonZonalRequest = requestService.getAllNonZonalRequest();
         return new ResponseEntity<>(allNonZonalRequest,HttpStatus.OK);
