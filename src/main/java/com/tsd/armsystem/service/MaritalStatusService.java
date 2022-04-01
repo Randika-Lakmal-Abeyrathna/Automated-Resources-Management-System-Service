@@ -26,4 +26,8 @@ public class MaritalStatusService {
         return maritalStatusRepository.findByStatus(status).stream().findFirst().orElseThrow(()-> new MaritalStatusException("Marital Status Not Found"));
 
     }
+
+    public MaritalStatus getMaritalStatusById(Integer id){
+        return maritalStatusRepository.findById(id).orElseThrow(()-> new MaritalStatusException("Marital Status Not Found"));
+    }
 }

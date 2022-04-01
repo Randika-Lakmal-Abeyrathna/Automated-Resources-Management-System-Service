@@ -31,7 +31,7 @@ public class User {
     private Integer contactNumber2;
     private String password;
     private boolean enabled;
-    private Date createddate;
+    private Instant createddate;
     private String email;
     private Instant lastmodifieddate;
     @ManyToOne(fetch = FetchType.EAGER)

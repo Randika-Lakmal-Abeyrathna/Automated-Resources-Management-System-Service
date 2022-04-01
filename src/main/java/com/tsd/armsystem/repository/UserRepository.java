@@ -12,4 +12,6 @@ public interface UserRepository extends JpaRepository<User,String> {
     Optional<User> findByNic(String nic);
 
     List<User> findByEnabled(boolean flag);
+
+    int countByNic(String nic);
 }
