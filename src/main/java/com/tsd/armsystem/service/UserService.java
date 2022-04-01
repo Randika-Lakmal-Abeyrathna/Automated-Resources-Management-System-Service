@@ -3,9 +3,7 @@ package com.tsd.armsystem.service;
 import com.tsd.armsystem.config.SecurityConfig;
 import com.tsd.armsystem.dto.*;
 import com.tsd.armsystem.exception.UserException;
-import com.tsd.armsystem.model.City;
-import com.tsd.armsystem.model.NotificationEmail;
-import com.tsd.armsystem.model.User;
+import com.tsd.armsystem.model.*;
 import com.tsd.armsystem.repository.CityRepository;
 import com.tsd.armsystem.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -25,6 +23,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
+    private final UserTypeService userTypeService;
+    private final StatusService statusService;
+    private final SalutationService salutationService;
+    private final GenderService genderService;
+    private final CityService cityService;
+    private final MaritalStatusService maritalStatusService;
+
 
     private CityRepository cityRepository;
 
@@ -120,34 +125,57 @@ public class UserService {
     }
 
 
-    public User addNewUser(Userdto userRegister) {
+    public User addNewUser(UserRequest request) {
+        System.out.println("Request Data => " + request);
+        User user = new User();
 
-        User reg = new User();
+        if (userRepository.countByNic(request.getNic()) >0 ){
+            throw new UserException("User Already Exists ");
+        }
 
-        reg.setAddressStreet(userRegister.getAddressStreet());
-        reg.setAddressStreet2(userRegister.getAddressStreet2());
-        City c =cityRepository.findbyCity(userRegister.getCity());
-        reg.setCity(c);
+        user.setNic(request.getNic());
+        user.setFirstName(request.getFirstName());
+        user.setMiddleName(request.getMiddleName());
+        user.setLastName(request.getLastName());
+        user.setAddressNo(request.getAddressNo());
+        user.setAddressStreet(request.getAddressStreet1());
+        user.setAddressStreet2(request.getAddressStreet2());
+        user.setContactNumber1(request.getContactNumber1());
+        user.setContactNumber2(request.getContactNumber2());
+        user.setEmail(request.getEmail());
 
-        reg.setContactNumber1(userRegister.getContactNumber1());
-        reg.setContactNumber2(userRegister.getContactNumber2());
-        reg.setCreateddate(userRegister.getCreateddate());
-        reg.setEmail(userRegister.getEmail());
-        reg.setFirstName(userRegister.getFirstName());
-        reg.setGender(userRegister.getGender());
-        reg.setImageData(userRegister.getImageData());
-        reg.setLastmodifieddate(Instant.now());
-        reg.setLastName(userRegister.getLastName());
-        reg.setMaritalStatus(userRegister.getMaritalStatus());
-        reg.setMiddleName(userRegister.getMiddleName());
-        reg.setNic(userRegister.getNic());
-        reg.setPassword(userRegister.getPassword());
-        reg.setRoles(userRegister.getRoles());
-        reg.setSalutation(userRegister.getSalutation());
-        reg.setStatus(userRegister.getStatus());
-        reg.setUserType(userRegister.getUserType());
+        user.setEnabled(true);
 
-        return userRepository.save(reg);
+        UserType userType = userTypeService.getUserTypeBuId(request.getUserTypeId());
+        user.setUserType(userType);
+
+        Status status = statusService.getStatusById(request.getStatusId());
+        user.setStatus(status);
+
+        Salutation salutation =  salutationService.getSalutationById(request.getSalutationId());
+        user.setSalutation(salutation);
+
+        Gender gender = genderService.findGenderById(request.getGenderId());
+        user.setGender(gender);
+
+        City city = cityService.getCityById(request.getCityId());
+        user.setCity(city);
+
+        MaritalStatus maritalStatus = maritalStatusService.getMaritalStatusById(request.getMaritalStatusId());
+        user.setMaritalStatus(maritalStatus);
+
+        String generatedPassword = SecurityConfig.randomPasswordGenerate();
+        user.setPassword(passwordEncoder.encode(generatedPassword));
+
+        user.setCreateddate(Instant.now());
+        user.setLastmodifieddate(Instant.now());
+
+        User saveUser = userRepository.save(user);
+
+        mailService.sendMail(new NotificationEmail(saveUser.getEmail(),"User Registered !","New Password for the system login is " + generatedPassword +"" +
+                " Please reset the password after the login. Thank you."));
+
+        return saveUser;
     }
 
     public void lockUser(String nic){

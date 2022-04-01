@@ -1,5 +1,6 @@
 package com.tsd.armsystem.service;
 
+import com.tsd.armsystem.exception.StatusException;
 import com.tsd.armsystem.model.Status;
 import com.tsd.armsystem.model.UserType;
 import com.tsd.armsystem.repository.StatusRepository;
@@ -21,5 +22,7 @@ public class StatusService {
           return statusRepository.findAll();
      }
 
-
+     public Status getStatusById(Integer id){
+          return statusRepository.findByIdstatus(id).orElseThrow(()-> new StatusException("Status Not found"));
+     }
 }

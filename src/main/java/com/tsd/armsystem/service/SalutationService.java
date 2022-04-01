@@ -25,4 +25,8 @@ public class SalutationService {
         return salutationRepository.findBySalutation(salutation).stream().findFirst().orElseThrow(()-> new SalutationException("Salutation Not Found"));
     }
 
+    public Salutation getSalutationById(Integer id){
+        return salutationRepository.findByIdsalutation(id).orElseThrow(()-> new SalutationException("Salutation Not Found"));
+    }
+
 }
