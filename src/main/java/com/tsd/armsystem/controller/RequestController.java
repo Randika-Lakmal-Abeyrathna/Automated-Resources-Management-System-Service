@@ -2,6 +2,7 @@ package com.tsd.armsystem.controller;
 
 
 import com.tsd.armsystem.dto.RequestOnboardingRequest;
+import com.tsd.armsystem.dto.RequestRejectRequest;
 import com.tsd.armsystem.dto.UpdateRequest;
 import com.tsd.armsystem.model.Carder;
 import com.tsd.armsystem.model.Request;
@@ -48,6 +49,12 @@ public class RequestController {
     @PostMapping("/approve")
     public ResponseEntity<?> approveTeacherRequest(@RequestBody RequestOnboardingRequest request){
         requestService.approveRequest(request);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/reject")
+    public ResponseEntity<?> rejectTeacherRequest(@RequestBody RequestRejectRequest requestRejectRequest){
+        requestService.rejectRequest(requestRejectRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
