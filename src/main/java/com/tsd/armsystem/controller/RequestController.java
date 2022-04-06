@@ -2,6 +2,7 @@ package com.tsd.armsystem.controller;
 
 
 import com.tsd.armsystem.dto.RequestOnboardingRequest;
+import com.tsd.armsystem.dto.UpdateRequest;
 import com.tsd.armsystem.model.Carder;
 import com.tsd.armsystem.model.Request;
 import com.tsd.armsystem.service.RequestService;
@@ -47,6 +48,18 @@ public class RequestController {
     @PostMapping("/approve")
     public ResponseEntity<?> approveTeacherRequest(@RequestBody RequestOnboardingRequest request){
         requestService.approveRequest(request);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/find/user/{nic}")
+    public ResponseEntity<List<Request>> getRequestByUserId(@PathVariable String nic){
+        List<Request> pendingRequestByNic = requestService.getRequestByNic(nic);
+        return new ResponseEntity<>(pendingRequestByNic,HttpStatus.OK);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<?> updateRequest(@RequestBody UpdateRequest updateRequest){
+        requestService.updateRequest(updateRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
