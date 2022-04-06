@@ -1,6 +1,7 @@
 package com.tsd.armsystem.service;
 
 import com.tsd.armsystem.dto.RequestOnboardingRequest;
+import com.tsd.armsystem.dto.RequestRejectRequest;
 import com.tsd.armsystem.dto.UpdateRequest;
 import com.tsd.armsystem.exception.RequestException;
 import com.tsd.armsystem.exception.RequestOnBoardingException;
@@ -109,6 +110,16 @@ public class RequestService {
         mailService.sendMail(new NotificationEmail(teacherEmail,"Transfer Request Approved.","Requested Transfer is approved. \n " +
                 "School Name : "+carder.getSchool().getName()+" and Appointment date is on : "+requestDate+" "));
 
+    }
+
+
+    public void rejectRequest(RequestRejectRequest requestRejectRequest){
+        Request request = getRequestById(requestRejectRequest.getId());
+        //Reject status -->2
+        request.setStatus(2);
+        request.setComment(requestRejectRequest.getComment());
+
+        requestRepository.save(request);
     }
 
     public List<RequestOnboarding> getAllPendingOnBoardingRequestsBySchoolId(Integer schoolId){
