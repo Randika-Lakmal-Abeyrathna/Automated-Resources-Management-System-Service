@@ -1,8 +1,10 @@
 package com.tsd.armsystem.service;
 
 import com.tsd.armsystem.dto.RequestOnboardingRequest;
+import com.tsd.armsystem.dto.UpdateRequest;
 import com.tsd.armsystem.exception.RequestException;
 import com.tsd.armsystem.exception.RequestOnBoardingException;
+import com.tsd.armsystem.exception.TeacherException;
 import com.tsd.armsystem.model.*;
 import com.tsd.armsystem.repository.*;
 import lombok.AllArgsConstructor;
@@ -28,6 +30,7 @@ public class RequestService {
     private final SchoolService schoolService;
     private final FormerExperienceRepository formerExperienceRepository;
     private final TeacherRepository teacherRepository;
+    private final UserService userService;
 
 
     public List<Request> getAllZonalRequest(Integer provinceId){
@@ -158,6 +161,37 @@ public class RequestService {
         // Status --> Approve -->1
         onboarding.setStatus(1);
         requestOnboadingRepository.save(onboarding);
+
+    }
+
+    public List<Request> getRequestByNic(String nic){
+
+        User user = userService.getUserForTeacherByNIC(nic);
+        Teacher teacher = teacherRepository.findByUser(user).orElseThrow(()->new TeacherException("Teacher Not found"));
+
+        return requestRepository.findByTeacher(teacher);
+
+    }
+
+    public void updateRequest(UpdateRequest updateRequest){
+
+        Request request = requestRepository.findById(updateRequest.getId()).orElseThrow(() -> new RequestException("Request Not Found"));
+
+        if (updateRequest.getSchoolId() > 0){
+            School school = schoolService.getSchoolById(updateRequest.getSchoolId());
+            request.setSchool(school);
+        }
+
+        if (updateRequest.getProvinceId() > 0){
+            Province province = provinceService.getProvinceById(updateRequest.getProvinceId());
+            request.setProvince(province);
+        }
+
+        request.setComment(updateRequest.getComment());
+
+        requestRepository.save(request);
+
+
 
     }
 
