@@ -172,7 +172,7 @@ public class UserService {
 
         User saveUser = userRepository.save(user);
 
-        mailService.sendMail(new NotificationEmail(saveUser.getEmail(),"User Registered !","New Password for the system login is " + generatedPassword +"" +
+        mailService.sendMail(new NotificationEmail(saveUser.getEmail(),"User Registered !","Your user name is "+ user.getNic()+"  and Password for the system login is " + generatedPassword +"" +
                 " Please reset the password after the login. Thank you."));
 
         return saveUser;
