@@ -60,15 +60,12 @@ public class TeacherService {
     public ResponseEntity<Teacher>  addTeacher(TeacherRequest teacherRequest) {
 
         Teacher teacher = new Teacher();
+        User userForTeacherByNIC = userService.getUserForTeacherByNIC(teacherRequest.getUserNic());
 
-        Teacher teacher1 = getTeacherByUser(teacherRequest.getUserNic());
+        int count = teacherRepository.countByUser(userForTeacherByNIC);
 
-        if (teacher1.getId() != 0){
-//            throw new TeacherException("This user is already registered");
-            Response response = new Response();
-            response.setMessage("This user is already registered");
-            response.setStatus(200);
-            return new ResponseEntity(response,HttpStatus.OK);
+        if (count > 0){
+            throw new TeacherException("Teacher is already exists");
 
         } else {
 
