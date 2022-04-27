@@ -20,4 +20,6 @@ public interface TeacherRepository extends JpaRepository<Teacher,Integer> {
     List<Teacher> findBySchool(School school);
 
     List<Teacher> findByUserNic(Teacher teacher);
+
+    int countByUser(User user);
 }
