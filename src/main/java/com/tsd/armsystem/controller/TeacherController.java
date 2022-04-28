@@ -90,4 +90,10 @@ public class TeacherController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("/find/request/{schoolid}")
+    public ResponseEntity<List<TeacherTransferData>> getAllTeacherRequestBySchool(@PathVariable Integer schoolid){
+        List<TeacherTransferData> allRequestForSchool = requestService.getAllRequestForSchool(schoolid);
+        return new ResponseEntity<>(allRequestForSchool,HttpStatus.OK);
+    }
+
 }

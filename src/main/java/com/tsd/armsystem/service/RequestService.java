@@ -2,6 +2,7 @@ package com.tsd.armsystem.service;
 
 import com.tsd.armsystem.dto.RequestOnboardingRequest;
 import com.tsd.armsystem.dto.RequestRejectRequest;
+import com.tsd.armsystem.dto.TeacherTransferData;
 import com.tsd.armsystem.dto.UpdateRequest;
 import com.tsd.armsystem.exception.RequestException;
 import com.tsd.armsystem.exception.RequestOnBoardingException;
@@ -142,6 +143,58 @@ public class RequestService {
         return allPendingOnBoardingRequests;
     }
 
+    public List<TeacherTransferData> getAllRequestForSchool(Integer schoolId){
+        List<TeacherTransferData> teacherTransferData = new ArrayList<>();
+
+        School school = schoolService.getSchoolById(schoolId);
+
+        List<Teacher> teacherList = teacherRepository.findBySchool(school);
+
+        for (Teacher t : teacherList) {
+            List<Request> requestList = requestRepository.findByTeacher(t);
+
+            for (Request r:requestList) {
+                if (r.getStatus() == 1){
+                    RequestOnboarding byRequest = requestOnboadingRepository.findByRequest(r).orElseThrow(() -> new RequestOnBoardingException("On Board request not found"));
+                    if (byRequest.getStatus() ==0){
+                        TeacherTransferData transferData = new TeacherTransferData();
+                        transferData.setNic(r.getTeacher().getUser().getNic());
+                        transferData.setName(r.getTeacher().getUser().getFirstName() + " "+ r.getTeacher().getUser().getLastName());
+                        transferData.setContactNo(r.getTeacher().getUser().getContactNumber1());
+                        transferData.setRequestType(r.getType().toUpperCase());
+                        transferData.setComment(r.getComment());
+                        transferData.setRequestStatus("Approved");
+                        transferData.setOnboardStatus("Pending");
+                        transferData.setAppointmentDate(byRequest.getAppointmentDate().toString());
+                        teacherTransferData.add(transferData);
+                    }
+
+
+
+                }else {
+                    TeacherTransferData transferData = new TeacherTransferData();
+                    transferData.setNic(r.getTeacher().getUser().getNic());
+                    transferData.setName(r.getTeacher().getUser().getFirstName() + " "+ r.getTeacher().getUser().getLastName());
+                    transferData.setContactNo(r.getTeacher().getUser().getContactNumber1());
+                    transferData.setComment(r.getComment());
+                    transferData.setRequestType(r.getType().toUpperCase());
+                    if (r.getStatus() == 0){
+                        transferData.setRequestStatus("Pending");
+                    }else if(r.getStatus() == 2){
+                        transferData.setRequestStatus("Reject");
+                    }
+                    transferData.setOnboardStatus("-");
+                    transferData.setAppointmentDate("-");
+
+                    teacherTransferData.add(transferData);
+                }
+            }
+
+        }
+
+
+        return teacherTransferData;
+    }
 
     public void approveOnBoardingTeacher(Integer id){
         RequestOnboarding onboarding = requestOnboadingRepository.findById(id).orElseThrow(() -> new RequestOnBoardingException("On Board request not found"));
