@@ -37,5 +37,10 @@ public class SchoolController {
         List<School> allSchools = schoolService.getAllSchools();
         return new ResponseEntity<>(allSchools, HttpStatus.CREATED);
     }
+    @GetMapping("/province/{provinceId}")
+    public ResponseEntity<List<School>> getSchoolByProvince(@PathVariable Integer provinceId){
+        List<School> schoolByProvince = schoolService.getSchoolByProvince(provinceId);
+        return new ResponseEntity<>(schoolByProvince,HttpStatus.OK);
+    }
 
 }
