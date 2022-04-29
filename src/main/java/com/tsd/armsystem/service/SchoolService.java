@@ -9,6 +9,7 @@ import org.checkerframework.checker.units.qual.s;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,6 +20,8 @@ public class SchoolService {
      private final CityService cityService;
      private final  ZonalService zonalService;
      private final SchoolTypeService schoolTypeService;
+     private final ProvinceService provinceService;
+     private final DistrictService districtService;
 
      private CarderService carderService;
 
@@ -46,6 +49,20 @@ public class SchoolService {
 
      public List<School> getAllSchools(){
           return schoolRepository.findAll();
+     }
+
+     public List<School> getSchoolByProvince(Integer provinceId){
+          List<School> schoolList = new ArrayList<>();
+          List<District> allDistrictByProvince = districtService.getAllDistrictByProvince(provinceId);
+          List<Zonal> zonalByDistrict = zonalService.getZonalByDistrict(allDistrictByProvince);
+
+          for (Zonal z: zonalByDistrict) {
+               List<School> byZonal = schoolRepository.findByZonal(z);
+               for (School s: byZonal) {
+                    schoolList.add(s);
+               }
+          }
+          return schoolList;
      }
 
 
