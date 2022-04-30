@@ -5,7 +5,9 @@ import com.tsd.armsystem.dto.*;
 import com.tsd.armsystem.exception.UserException;
 import com.tsd.armsystem.model.*;
 import com.tsd.armsystem.repository.CityRepository;
+import com.tsd.armsystem.repository.RoleRepository;
 import com.tsd.armsystem.repository.UserRepository;
+import com.tsd.armsystem.repository.UserRoleRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,8 @@ public class UserService {
     private final GenderService genderService;
     private final CityService cityService;
     private final MaritalStatusService maritalStatusService;
+    private final RoleRepository roleRepository;
+    private final UserRoleRepository userRoleRepository;
 
 
     private CityRepository cityRepository;
@@ -171,6 +175,23 @@ public class UserService {
         user.setLastmodifieddate(Instant.now());
 
         User saveUser = userRepository.save(user);
+
+        Role role =null;
+        if(saveUser.getUserType().getUserType().equalsIgnoreCase("admin")){
+            role = roleRepository.findByName("ADMIN").orElseThrow();
+        }else if(saveUser.getUserType().getUserType().equalsIgnoreCase("superadmin")){
+            role = roleRepository.findByName("SUPERADMIN").orElseThrow();
+        }else if(saveUser.getUserType().getUserType().equalsIgnoreCase("dataentry")){
+            role = roleRepository.findByName("DATAENTRY").orElseThrow();
+        }else{
+            role = roleRepository.findByName("USER").orElseThrow();
+        }
+
+        UserRoles userRoles = new UserRoles();
+        userRoles.setRole(role);
+        userRoles.setUser(saveUser);
+
+        userRoleRepository.save(userRoles);
 
         mailService.sendMail(new NotificationEmail(saveUser.getEmail(),"User Registered !","Your user name is "+ user.getNic()+"  and Password for the system login is " + generatedPassword +"" +
                 " Please reset the password after the login. Thank you."));
