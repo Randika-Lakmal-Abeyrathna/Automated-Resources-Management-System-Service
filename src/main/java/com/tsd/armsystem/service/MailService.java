@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class MailService {
     private final JavaMailSender javaMailSender;
-    private final MailContentBuilder mailContentBuilder;
 
 
     @Async
@@ -23,10 +22,10 @@ public class MailService {
 
         MimeMessagePreparator mimeMessagePreparator = mimeMessage -> {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
-            mimeMessageHelper.setFrom("resroucemanagementtsd@gmail.com");
+//            mimeMessageHelper.setFrom("");
             mimeMessageHelper.setTo(notificationEmail.getRecipient());
             mimeMessageHelper.setSubject(notificationEmail.getSubject());
-            mimeMessageHelper.setText(mailContentBuilder.build(notificationEmail.getBody()));
+            mimeMessageHelper.setText(notificationEmail.getBody());
         };
 
         try{
