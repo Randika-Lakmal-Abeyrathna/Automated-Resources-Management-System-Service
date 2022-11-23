@@ -24,7 +24,7 @@ public class AutomatedResourcesManagementSystemApplication {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 
-				registry.addMapping("/**").allowedOrigins(url);
+				registry.addMapping("/**").allowedOrigins("*");
 			}
 		};
 	}
