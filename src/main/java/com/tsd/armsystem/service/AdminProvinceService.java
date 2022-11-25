@@ -18,7 +18,6 @@ public class AdminProvinceService {
     private final UserService userService;
 
     public List<AdminProvince> getAdminProvinceByUser(String nic){
-        User user = userService.getUserForTeacherByNIC(nic);
-        return adminProvinceRepository.findByUser(user);
+        return adminProvinceRepository.findByUser(nic);
     }
 }
