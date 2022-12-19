@@ -4,6 +4,7 @@ import com.tsd.armsystem.exception.CityException;
 import com.tsd.armsystem.model.City;
 import com.tsd.armsystem.repository.CityRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ public class CityService {
      }
 
      public List<City> getAllCity(){
+          System.out.println("================================Call to Repository");
           return cityRepository.findAll();
      }
 
