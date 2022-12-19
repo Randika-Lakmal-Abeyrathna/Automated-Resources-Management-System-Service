@@ -4,6 +4,7 @@ package com.tsd.armsystem.controller;
 import com.tsd.armsystem.model.City;
 import com.tsd.armsystem.service.CityService;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

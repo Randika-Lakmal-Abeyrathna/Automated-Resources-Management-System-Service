@@ -8,6 +8,7 @@ class AutomatedResourcesManagementSystemApplicationTests {
 
 	@Test
 	void contextLoads() {
+
 	}
 
 }

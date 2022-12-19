@@ -4,6 +4,10 @@ import com.tsd.armsystem.exception.GenderException;
 import com.tsd.armsystem.model.Gender;
 import com.tsd.armsystem.repository.GenderRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -12,6 +16,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 @Transactional
+@CacheConfig(cacheNames = {"Gender"})
 public class GenderService {
 
     private final GenderRepository genderRepository;
@@ -42,6 +47,7 @@ public class GenderService {
         return gender;
     }
 
+    @CachePut(key = "#result.idgender")
     public Gender updateGender(Gender gender){
         genderValidation(gender);
         Gender newGender = setGenderNameToLowerCase(gender);
@@ -53,6 +59,7 @@ public class GenderService {
         return genderRepository.findAll();
     }
 
+    @Cacheable(key = "#id")
     public Gender findGenderById(Integer id){
         return genderRepository.getGenderByIdgender(id)
                 .orElseThrow(()-> new GenderException("Gender by Id "+id+" was not found"));
@@ -64,6 +71,7 @@ public class GenderService {
     }
     // Find Gender --End
 
+    @CacheEvict(key = "#id")
     public void deleteGenderById(Integer id){
         genderRepository.deleteGenderByIdgender(id);
     }
