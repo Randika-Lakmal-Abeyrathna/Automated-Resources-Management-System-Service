@@ -1,6 +1,5 @@
 package com.tsd.armsystem;
 
-import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,7 +11,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
 @EnableCaching
-@EnableEncryptableProperties
 public class AutomatedResourcesManagementSystemApplication {
 
 	@Value("${app.frontend}")
