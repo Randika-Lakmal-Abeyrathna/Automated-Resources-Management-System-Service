@@ -31,7 +31,7 @@ jobs:
       run: mvn clean install
 
     - name: Build & push Docker image
-      uses: mr-smithers-excellent/docker-build-push@5
+      uses: mr-smithers-excellent/docker-build-push@v5
       with:
         image: randika93/arm-service
         tags: latest
