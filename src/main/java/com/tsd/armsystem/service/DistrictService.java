@@ -19,8 +19,7 @@ public class DistrictService {
 
     public List<District> getAllDistrictByProvince(Integer provinceId){
         Province provinceById = provinceService.getProvinceById(provinceId);
-        List<District> byProvince = districtRepository.findByProvince(provinceById);
-        return byProvince;
+        return districtRepository.findByProvince(provinceById);
     }
 
 }
